@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <!--自适应屏幕-->
+    <meta name="format-detection" content="telphone=no, email=no"/>
+    <!--取消ios自动识别手机号码与邮箱-->
+    <title>book</title>
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css"/>
+    <link rel="stylesheet" href="../../common.css"/>
+    <link rel="stylesheet" href="book.css"/>
+</head>
+
+<body>
+<div id="app">
+    <header class="mui-bar mui-bar-nav">
+				<span class="right" v-show="!isAdmin">
+				<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="bookBack"></i>
+				返回
+			</span>
+        <span class="right" v-show="isAdmin" @click="cancel">取消</span>
+        <h1 class="mui-title">书架</h1>
+        <a class="mui-icon mui-icon-bars revise" style="text-decoration: none" href="#popover" v-show="!isAdmin"></a>
+        <div id="popover" class="mui-popover">
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell" style="line-height: 20px;padding: 10px 0 10px 15px;" @click="someDel" v-show="hasBook">
+                    多选
+                </li>
+                <li class="mui-table-view-cell" style="line-height: 20px;padding: 10px 0 10px 15px;" @click="addBook">
+                    新增
+                </li>
+            </ul>
+        </div>
+        <div v-show="isAdmin" class="revise" @click="submitDel">删除</div>
+    </header>
+
+    <p class="mui-text-center ctt-content" style="margin-top: 70px;" v-show="!hasBook">当前无书籍</p>
+
+    <!--二期-->
+    <!--<div class="flex ctt-content" v-show="hasBook">
+        <select name="chooseType" class="chooseType">
+            <option value="">类别</option>
+            <option value="">类别1</option>
+            <option value="">类别2</option>
+            <option value="">类别3</option>
+        </select>
+
+        <select name="chooseType" class="chooseType">
+            <option value="">类别</option>
+            <option value="">类别1</option>
+            <option value="">类别2</option>
+            <option value="">类别3</option>
+        </select>
+        <button class="chooseSubmit">筛选</button>
+    </div>-->
+
+    <div class="bookList ctt-content" v-show="hasBook && !isAdmin">
+        <li class="mui-table-view-cell mui-media bookList-li flex" v-for="it in bookList" @click="goBookMsg(it)">
+            <p class="book-name" v-html="it.name"></p>
+            <p class="book-author" v-html="it.author"></p>
+            <p class="book-des" v-html="it.description"></p>
+        </li>
+    </div>
+
+    <form class="mui-input-group bookList ctt-content" v-show="isAdmin">
+        <li class="mui-table-view-cell mui-media bookList-li flex" v-for="it in bookList" @click="selectThis(it)">
+            <p class="book-name" v-html="it.name" ></p>
+            <p class="book-author" v-html="it.author"></p>
+            <p class="book-des" v-html="it.description" style="width: 40%;"></p>
+            <div class="mui-input-row mui-checkbox" style="width: 20%;margin: 0;height: 40px;">
+                <input type="checkbox" name="checkbox">
+            </div>
+        </li>
+    </form>
+
+
+
+
+    <!-- 模态框部分 -->
+    <div class="spinner" v-show="!statu">
+        <div class="spinner-container container1">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container2">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+            <div class="circle1"></div>
+            <div class="circle2"></div>
+            <div class="circle3"></div>
+            <div class="circle4"></div>
+        </div>
+    </div>
+    <div class="zzc" v-show="!statu"></div>
+
+</div>
+</body>
+
+<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+<script type="text/javascript" src="../../common.js"></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            isAdmin: false,
+            hasBook: true,
+            statu: false,
+            bookList: [],
+            isText: true,
+            changeList: []
+        },
+        mounted: function () {
+            this.getBookList()
+        },
+        methods: {
+            addBook: function () {
+                location.href = "addbook.html";
+            },
+            bookBack: function () {
+                location.href = "./../../index.html";
+            },
+            getBookList: function () {
+                var data = JSON.stringify({
+                    "userId": window.localStorage.getItem("userId"),
+                    "token": window.localStorage.getItem("token"),
+                    "pageSize": 10000
+                });
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/bookshelf/bookshelfList',
+                    data: data,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    }
+                }).then((res) => {
+                    this.bookList = res.data.page.list;
+                    for (let i = 0; i < this.bookList.length; i++) {
+                        this.bookList[i].isSelect = 0;
+                        if (this.bookList[i].author == null) {
+                            this.bookList[i].author = '未知'
+                        }
+
+                    }
+                    if(this.bookList.length == 0){
+                        this.hasBook = false
+                    }
+                    window.app.statu = true;
+                })
+            },
+            goBookMsg: function (it) {
+                window.location.href = 'detailbook.html' + '?' + it.id;
+            },
+            someDel: function () {
+                this.isAdmin = true;
+                mui('.mui-popover').popover('hide');
+            },
+            submitDel: function () {
+                for(var j = 0; j < this.bookList.length; j++){
+                    if(this.bookList[j].isSelect == 1){
+                        this.changeList.push(this.bookList[j].id)
+                    }
+                }
+                this.isAdmin = false;
+                console.log(this.changeList);
+                var data = JSON.stringify({
+                    "userId": window.localStorage.getItem("userId"),
+                    "token": window.localStorage.getItem("token"),
+                    "id": this.changeList
+                });
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '//app/bookshelf/deleteBatch',
+                    data: data,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    }
+                    // params: {
+                    //     userId: window.localStorage.getItem("userId"),
+                    //     token: window.localStorage.getItem("token"),
+                    //     id: JSON.stringify(this.changeList)
+                    //     // id: this.changeList
+                    //
+                    // },
+                    // paramsSerializer: function(params) {
+                    //     const yourNewParams = params.tag.map(_=>`tag=${_}`).join('&')
+                    //     return yourNewParams
+                    // },
+                }).then((res) => {
+                    if(res.data.code == 0){
+                        // location.reload();
+                        this.getBookList();
+                    }else{
+                        mui.toast(res.data.msg, {
+                            duration: 'long',
+                            type: 'div'
+                        })
+                    }
+                });
+            },
+            cancel: function () {
+                this.isAdmin = false
+            },
+            selectThis: function (it) {
+                if(it.isSelect == 0){
+                    it.isSelect = 1
+                }else{
+                    it.isSelect = 0
+                }
+                console.log(it.isSelect);
+            }
+        }
+    })
+</script>
+
+</html>

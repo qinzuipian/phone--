@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>电子围栏</title>
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css">
+    <link rel="stylesheet" href="../../common.css">
+    <link rel="stylesheet" href="fence.css">
+    <style>
+        table tr td {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <span class="right">
+                <i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="repBack"></i>
+                返回
+            </span>
+            <h1 class="mui-title">告警管理</h1>
+            <!-- <span class="mui-icon mui-icon-plusempty revise" @click="addfence"></span> -->
+        </header>
+        <div class="content">
+            <table border="1" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>围栏类型</th>
+                        <th>围栏名称</th>
+                        <th>告警动作</th>
+                        <th>告警时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in list">
+                        <td>{{item.fenceType}}</td>
+                        <td>{{item.fenceName}}</td>
+                        <td>{{item.action}}</td>
+                        <td>{{item.alarmTime | formatDate}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+    <script type="text/javascript" src="../../plugin/js/vue.js"></script>
+    <script type="text/javascript" src="../../plugin/js/axios.js"></script>
+    <script type="text/javascript" src="../../common.js"></script>
+    <script src="date.js"></script>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                list: []
+            },
+            filters: {
+                formatDate(time) {
+                    var date = new Date(time);
+                    return formatDate(date, 'yyyy-MM-dd hh:mm');
+                }
+            },
+            methods: {
+                repBack: function () {
+                    location.href = "all.html";
+                },
+                getplay: function () {
+                    axios({
+                        method: 'post',
+                        url: JTURLAPI + '/app/alarm/list',
+                        data: {
+                            userId: window.localStorage.getItem("userId"),
+                            token: window.localStorage.getItem("token")
+                        },
+                        transformRequest: [function (data) {
+                            let ret = ''
+                            for (let it in data) {
+                                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                            }
+                            return ret
+                        }],
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        window.vm.list = res.data.list;
+                        for (var i = 0; i < window.vm.list.length; i++) {
+                            switch (window.vm.list[i].fenceType) {
+                                case '1':
+                                    window.vm.list[i].fenceType = '圆形';
+                                    break;
+                                case '2':
+                                    window.vm.list[i].fenceType = '多边形';
+                                    break;
+                            }
+                            switch (window.vm.list[i].action) {
+                                case '1':
+                                    window.vm.list[i].action = '进入';
+                                    break;
+                                case '2':
+                                    window.vm.list[i].action = '越界';
+                                    break;
+                            }
+                        }
+                    });
+                }
+            },
+            created() {
+                this.getplay();
+            }
+        })
+    </script>
+</body>
+
+</html>

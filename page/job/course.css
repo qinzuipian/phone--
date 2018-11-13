@@ -1,0 +1,227 @@
+#app {
+    min-width: 320px;
+    overflow-x: scroll;
+}
+
+/*隐藏滚动条*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+.mui-text-center {
+    background-color: #f6f6f6;
+    border-bottom: 1px solid #f6f6f6;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.top {
+    background-color: #fff;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}
+
+span {
+    color: #fff;
+    font-size: 12px;
+    line-height: 40px;
+}
+
+.revise {
+    float: right;
+    margin-right: 0.75rem;
+    font-weight: 700;
+    color: white;
+}
+
+.course-content {
+    /*width: 375px;*/
+    flex-wrap: wrap;
+}
+
+.course-left {
+    text-align: center;
+    width: 30%;
+    border-right: 1px solid #8f8f94;
+    /*position: fixed;*/
+    /*left: 0;*/
+    flex-wrap: wrap;
+}
+
+.course-right {
+    width: 70%;
+    /*margin-left: 30%;*/
+    display: -webkit-box;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.left-msg {
+    width: 50%;
+    text-align: center;
+    background: #f6f6f6;
+
+}
+
+.left-msg p {
+    text-align: center;
+    line-height: 59px;
+    border-bottom: 1px solid #8f8f94;
+    border-left: 1px solid #8f8f94;
+    font-size: 12px;
+}
+
+.left-msg p:nth-child(1) {
+    height: 40px;
+    border-top: 1px solid #8f8f94;
+}
+
+.left-msg p:nth-child(odd){
+    background: rgb(170, 238, 246);
+}
+
+.left-msg-right p {
+    border-left: 1px solid #8f8f94;
+    line-height: 29px;
+    height: 30px;
+}
+
+.left-msg-right p:nth-child(1) {
+    border-left: none;
+}
+
+.right-msg {
+    width: 100px;
+    text-align: center;
+    background: #f6f6f6;
+}
+
+.right-msg p {
+    text-align: center;
+    border-right: 1px solid #8f8f94;
+    line-height: 59px;
+    height: 60px;
+    border-bottom: 1px solid #8f8f94;
+    font-size: 12px;
+}
+
+.right-msg p:nth-child(1) {
+    height: 40px;
+    border-top: 1px solid #8f8f94;
+    line-height: 40px;
+    padding-top: 0;
+
+    color: white;
+}
+
+.right-msg p:nth-child(odd) {
+    background: rgb(170, 238, 246);
+}
+.right-msg p:nth-child(odd) .customSelect{
+    background: rgb(170, 238, 246);
+}
+
+.course-remark {
+    width: 30%;
+    height: 60px;
+    border-right: 1px solid #8f8f94;
+}
+
+/*.course-remark p{
+    text-align: center;
+    border-left: 1px solid #8f8f94;
+    border-bottom: 1px solid #8f8f94;
+    padding-top: 23px;
+}*/
+.remark-title {
+    width: 100%;
+    text-align: center;
+    border-left: 1px solid #8f8f94;
+    border-bottom: 1px solid #8f8f94;
+    line-height: 60px;
+}
+
+.remark-msg {
+    width: 70%;
+    /*border-right: 1px solid #8f8f94;*/
+    /*border-bottom: 1px solid #8f8f94;*/
+    display: -webkit-box;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    line-height: 59px;
+    text-align: left;
+    /*padding-left: 10px;*/
+}
+
+.remark-msg p {
+    text-align: left;
+    width: 500%;
+    line-height: 59px;
+    border-bottom: 1px solid #8f8f94;
+    border-right: 1px solid #8f8f94;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.result {
+    background: #f6f6f6;
+    border: none;
+    width: 100%;
+    text-align: center;
+}
+
+.custom {
+    text-align: center;
+    margin: 0;
+    background: #f6f6f6;
+}
+
+.customSelect {
+    padding-left: calc(50% - 13px);
+    background: #f6f6f6;
+    height: 58px;
+}
+
+/*弹出菜单*/
+#popover {
+    width: 91px;
+}
+
+.mui-table-view-cell {
+    line-height: 20px;
+}
+
+.mui-table-view-cell a {
+    text-decoration: none;
+}
+
+
+
+.remarkCourse{
+    border: none!important;
+    padding: 0 0 0 10px!important;
+    background: #f6f6f6!important;
+    margin: 0!important;
+    width: 100%!important;
+}
+
+
+
+
+
+/*location.html*/
+/*设置定位模式*/
+.mui-navigate-right{
+    margin: 0!important;
+    width: 100%!important;
+}
+.mui-table-view-radio .mui-table-view-cell{
+    padding-right: 0!important;
+}
+
+
+
+
+
+

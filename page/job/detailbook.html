@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="detailbook.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>书架详情</title>
+	</head>
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span><i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goback"></i>返回</span>
+				<h1 class="mui-title">书架详情</h1>
+				<span class="revise" @click="submit">编辑</span>
+			</header>
+
+			<div class="main ctt-content">
+				<div class="img_wrap">
+					<img src="../../images/information.jpg" />
+				</div>
+				<h1 v-html="list.name"></h1>
+				<h2 v-html="list.author"></h2>
+				<p  v-html="list.description"></p>
+				<!--<p class="right"> -- 阿尔伯特·爱因斯坦</p>-->
+			</div>
+			
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+		</div>
+
+		<script src="../../plugin/js/mui.min.js"></script>
+		<script src="../../plugin/js/mui.picker.min.js"></script>
+		<script src="../../plugin/js/vue.js"></script>
+		<script src="../../plugin/js/axios.js"></script>
+		<script src="../../common.js"></script>
+		<script>
+			var id;
+			var app = new Vue({
+				el: "#app",
+				data: {
+					statu: true,
+					list: {
+						name: '',
+						author: '',
+						description: '',
+						id: ''
+					}
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+					getMsg: function() {
+						tabId = window.location.href.split('?')[1];
+						this.id = tabId;
+//						console.log(this.id);
+
+
+						var data = JSON.stringify({
+							"userId": window.localStorage.getItem("userId"),
+							"token": window.localStorage.getItem("token"),
+							"pageSize": 10000
+						});
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/bookshelf/bookshelfList',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then((res) => {
+							this.bookList = res.data.page.list;
+							for(let i = 0; i < this.bookList.length; i++) {
+//								console.log(tabId);
+								if(this.bookList[i].id == tabId){
+
+								    if(this.bookList[i].name == null){
+								        this.list.name = '暂无书名'
+                                    }else{
+								        this.list.name = this.bookList[i].name
+                                    }
+
+                                    if(this.bookList[i].author == null){
+								        this.list.author = '未知作者'
+                                    }else{
+								        this.list.author = this.bookList[i].author
+                                    }
+
+                                    if(this.bookList[i].description == null){
+								        this.list.description = '暂无简介'
+                                    }else{
+								        this.list.description = this.bookList[i].description
+                                    }
+
+								}
+	
+							}
+							
+//							window.app.statu = true;
+							
+						})
+						
+					},
+					submit: function() {
+						window.location.href = 'editbook.html' + '?' + tabId;						
+					},
+					goback: function() {
+						window.location.href = "book.html";
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

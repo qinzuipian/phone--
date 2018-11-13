@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>addWebsite</title>
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="addWebsite.css" />
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span class="right">
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left go-back" @click="monitorGoBack"></i>
+					返回
+				</span>
+				<h1 class="mui-title">添加网站</h1>
+				<span class="revise" @click="submit">完成</span>
+			</header>
+			<div class="mui-input-row add-content">
+				<label class="mui-text-right"><span class="must">*</span>网址名称:</label>
+				<input type="text" id="cgPlce" v-model="webMsg.name" class="mui-input-clear" placeholder="请输入网址名称">
+			</div>
+
+			<div class="mui-input-row add-content-web">
+				<label class="mui-text-right"><span class="must">*</span>网址链接:</label>
+				<input type="text" id="cgPlce" v-model="webMsg.url" class="mui-input-clear" placeholder="请输入网址链接">
+			</div>
+			
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+			
+		</div>
+
+	</body>
+
+	<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+	<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+	<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+	<script type="text/javascript" src="../../common.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				statu: true,
+				webMsg: {
+					
+					name: '',
+					url: ''
+				}
+			},
+			mounted: function() {
+				
+			},
+			methods: {
+				submit: function() {
+					var data = JSON.stringify({
+						"name": window.app.webMsg.name + "",
+						"url": window.app.webMsg.url + "",
+						"userId": window.localStorage.getItem("userId"),
+						"token": window.localStorage.getItem("token")
+					});
+					if(this.webMsg.name !== '' && this.webMsg.url !== '') {
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/website/save',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then(function(res) {
+							if(res.data.code == 0) {
+								location.href = './website.html';
+							} else {
+	//							$.toptip('新增失败', 'error');
+								mui.toast('新增失败',{ duration:'long', type:'div' });
+							}
+							window.app.statu = false;
+						})
+					}
+					else{
+						mui.alert('请输入必填项', function() {});
+					}
+				
+				},
+                monitorGoBack: function() {
+					// if(this.name !== '' || this.url !== '') {
+					// 	var btnArray = ['请确认'];
+					// 	mui.confirm('您尚未编辑完,是否放弃编辑？', btnArray, function(e) {
+					// 		if(e.index == 0) {
+					// 			location.href = './website.html';
+					// 		} else {
+					// 			location.href = './website.html';
+					// 		}
+					// 	})
+					// } else {
+					// 	location.href = './website.html';
+					// }
+                    var btnArray = ['请确认'];
+                    mui.confirm('您尚未编辑完,是否放弃编辑？', btnArray, function(e) {
+                        if(e.index == 0) {
+                            // location.href = './website.html';
+                        } else {
+                            location.href = './website.html';
+                        }
+                    })
+
+
+				}
+			}
+		});
+	</script>
+
+</html>

@@ -1,0 +1,46 @@
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 40px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+
+.img_wrap{
+	height: 7.5rem;	
+	position: relative;
+}
+.img_wrap .mui-icon{
+	font-size: 100px;
+	position: absolute;
+	left: 37%;
+	margin-top: 1.5rem;
+	
+}
+.mui-table-view{
+	margin-top: 2rem;
+	margin-bottom: 2rem;
+	font-size: 12px;
+}
+.mui-table-view span{
+	color: #4C6FB0;
+	margin-left: 1rem;
+}
+.mui-table-view-cell{
+	padding: 0.25rem 1rem;
+}
+.mui-btn-primary{
+	border: #4C6FB0;
+	background-color: #4C6FB0;
+}
+.mui-btn, button{
+	width: 80%;
+	padding: 0.8rem 0.6rem;
+	clear: both; 
+	display: block; 
+	margin:auto; 
+	margin-top: 1.5rem;
+	
+}

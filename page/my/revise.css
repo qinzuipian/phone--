@@ -1,0 +1,53 @@
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 40px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+
+.mui-input-group{
+	margin-top: 70px;
+	font-size: 16px;
+}
+#select{
+	font-size: 12px;
+	margin: auto;
+    padding: 0 0 0 22%;
+}
+.mui-input-group .mui-input-row:after{
+	background-color: #F5F5F5;
+}
+.mui-input-group:before,
+.mui-input-group:after{
+	background-color: #F5F5F5;
+}
+.mui-input-row label~input{
+	border-bottom: 0.05rem solid #c8c7cc;
+}
+.mui-input-group{
+	background-color: #F5F5F5;
+}
+.mui-input-group .mui-input-row{
+	height: 3.2rem;
+}
+.mui-input-row label{
+	font-size: 12px;
+	width: 30%;
+	padding: 0.75rem 0rem 0.75rem 2.5rem;
+}
+.mui-input-row label~input,
+ .mui-input-row label~select{
+	text-align: center;
+	float: none;
+	width: 50%;
+}
+.mui-input-row .mui-input-clear~.mui-icon-clear{
+	right: 4.5rem;
+}
+
+.mui-input-clear::-webkit-input-placeholder{
+	font-size: 14px;
+}

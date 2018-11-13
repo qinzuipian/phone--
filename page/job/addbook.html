@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="addbook.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>新增书架</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span>
+				<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goBack"></i>返回</span>
+				<h1 class="mui-title">新增书架</h1>
+			</header>
+
+			<form class="mui-input-group ctt-content">
+				<div class="mui-input-row" style="margin-top: 50px;">
+					<label><span class="must">*</span>书籍名：</label>
+					<input type="text" class="mui-input-clear" v-model="name" placeholder="请输入书名或备注">
+				</div>
+				<div class="mui-input-row">
+					<label>作&nbsp;&nbsp;&nbsp;者：</label>
+					<input type="text" class="mui-input-clear" v-model="author" placeholder="请输入作者">
+				</div>
+				<div class="mui-input-row">
+					<label>描&nbsp;&nbsp;&nbsp;述：</label>
+					<input type="text" class="mui-input-clear" v-model="description" placeholder="请输入您对这本书的描述或者备注">
+				</div>
+				<div class="mui-input-row">
+					<label><span class="must">*</span>链&nbsp;&nbsp;&nbsp;接：</label>
+					<input type="text" class="mui-input-clear" v-model="downloadUrl" placeholder="请输入下载链接">
+				</div>
+				<!--<div class="mui-input-row">
+					<label>类&nbsp;&nbsp;&nbsp;别：</label>
+					<select id="select">
+						<option value="">请选择</option>
+						<option value="">类别1</option>
+						<option value="">类别2</option>
+						<option value="">类别3</option>
+					</select>
+				</div>-->
+				<!--<button class="small">选择文件</button>-->
+				<button type="button" class="mui-btn mui-btn-primary" @click="submit">确认</button>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script>
+			var app = new Vue({
+				el: "#app",
+				data: {
+					name: '',
+					author: '',
+					description: '',
+					downloadUrl: ''
+				},
+				methods: {
+					submit: function() {
+						if(this.name == '') {
+							mui.alert('请输入必填项', function() {});
+						} else if(this.downloadUrl == '') {
+							mui.alert('请输入必填项', function() {});
+						} else {
+							if(this.author == '') {
+								this.author = '未知'
+							}
+							if(this.description == '') {
+								this.description = '暂未描述'
+							}
+
+							console.log(this.name)
+							console.log(this.author)
+							console.log(this.description)
+							console.log(this.downloadUrl)
+
+							var data = JSON.stringify({
+								"userId": window.localStorage.getItem("userId"),
+								"token": window.localStorage.getItem("token"),
+								"name": window.app.name + '',
+								"author": window.app.author + '',
+								"description": window.app.description + '',
+								"downloadUrl": window.app.downloadUrl + ''
+							});
+							console.log(data)
+							axios({
+								method: 'post',
+								url: JTURLAPI + '/app/bookshelf/save',
+								data: data,
+								//								params: {
+								//									"userId": window.localStorage.getItem("userId"),
+								//									"token": window.localStorage.getItem("token"),
+								//									"name": this.name,
+								//									"author": this.author,
+								//									"description": this.description,
+								//									"downloadUrl": this.downloadUrl
+								//								}
+								headers: {
+									"Content-Type": "application/json;charset=UTF-8"
+								}
+							}).then((res) => {
+								if(res.data.code == 0) {
+									window.location.href = "book.html";
+								} else {
+									mui.toast(res.data.msg, {
+										duration: 'long',
+										type: 'div'
+									})
+								}
+
+							}).catch(err => {
+								mui.toast('新增失败,请检查网络', {
+									duration: 'long',
+									type: 'div'
+								})
+							})
+						}
+
+					},
+					goBack: function() {
+						location.href = "./book.html";
+					}
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

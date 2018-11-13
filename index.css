@@ -1,0 +1,204 @@
+html,
+body {
+	height: 100%;
+	overflow: scroll;
+}
+
+.mui-bar-nav~.mui-content {
+	padding: 0;
+}
+
+.mui-table-view {
+	/*margin-top: 14px;*/
+}
+
+.mui-content {
+	background-color: transparent;
+}
+
+#list .num,
+.me {
+	font-size: 12px;
+	margin-left: 16px;
+	/*font-weight: 700;*/
+}
+
+#list .cur,
+.mes {
+	color: #0f0;
+}
+
+#list .web {
+	color: #00f;
+}
+
+#list .book,
+.pass {
+	color: #FFB300;
+}
+
+.card {
+	color: #f00;
+}
+
+.mui-btn-block {
+	padding: 10px;
+	margin-top: 15px;
+}
+
+.title {
+	background-color: #fff;
+	height: 70px;
+	position: relative;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	margin: 45px 6px 15px;
+}
+
+.title img {
+	width: 50px;
+	height: 50px;
+	left: 6px;
+}
+
+.title .right {
+	right: 100px;
+	font-size: 16px;
+	/*font-weight: 700;*/
+}
+
+.title .right,
+.title img {
+	position: absolute;
+	top: calc(50% - 25px);
+	/*transform: translateY(-40px);*/
+}
+
+.mui-bar-tab {
+	z-index: 999;
+}
+
+#bar a {
+	height: 23px;
+	width: 22px;
+}
+
+/*#tabbar {
+	height: 666px;
+	position: relative;
+}
+
+#tabbar .pic {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	;
+	transform: translate(-46px, -54px);
+}*/
+
+.person {
+	display: block;
+}
+
+.warn {
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.outbox {
+	position: relative;
+}
+
+.warnbox {
+	width: 158px;
+	height: 68px;
+	background-color: #9C9D9C;
+	color: #fff;
+	text-align: center;
+	font-size: 16px;
+	border-radius: 6px;
+	position: absolute;
+	top: -8px;
+	right: 23%;
+}
+
+.triangle {
+	font-size: 0;
+	line-height: 0;
+	overflow: hidden;
+	border-width: 16px;
+	border-style: dashed solid dashed dashed;
+	border-color: transparent #9C9D9C transparent transparent;
+	position: absolute;
+	top: 2px;
+	left: 32%;
+}
+.mui-control-content{
+	display: block;
+}
+.mui-toast-container{
+	top: 20%;
+}
+/*通讯录搜索框样式修改*/
+.mui-indexed-list-search.mui-search:before{
+	margin-top: -20px;
+}
+
+
+
+/*首页导航栏修改*/
+.nav-first-p{
+	font-size: 21px;
+	margin-top: 3px;
+}
+.nav-sec-p{
+	font-size: 12px;
+	text-align: center;
+	line-height: 12px;
+}
+.nav-active{
+	color: #007aff;
+}
+
+
+
+/*通讯录*/
+
+.noMsg{
+	font-size: 12px;
+	line-height: 40px;
+	text-align: center;
+	width: 100%;
+	color: #888888;
+}
+.mail-list-ul{
+	overflow: scroll;
+}
+.mail-list-title{
+    border-bottom: 1px solid #33cccc;
+    line-height: 14px;
+    padding-left: 10px;
+    font-size: 12px;
+    color: gray;
+    background: #f7f7f7;
+}
+
+.mail-list-cont{
+	width: calc(100% - 15px);
+    line-height: 24px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: gray;
+    border-top: 1px solid #00cccc;
+    background: #fff;
+    margin-left: 15px;
+}
+.mail-list-item-div li:nth-child(1){
+	border: 0;
+}
+
+/*修改部分框架源码*/
+.mui-search:before{
+	font-size: 15px!important;
+	top: 70% !important;
+}

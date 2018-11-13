@@ -1,0 +1,48 @@
+#app header span{
+	color:white;
+	font-size: 16px;
+}
+/*距离头部的空白*/
+#spac{
+	margin-top:80px;
+}
+.mui-input-row label{
+	font-weight:bold;
+}
+/*表单下边的空白*/
+.mui-content-padded{
+	margin-top:30px;
+}
+/*提交按钮的样式*/
+#signin{
+	font-size:16px;
+	background-color:#4C6FB0;
+	border-radius:5px;
+}
+			/*按钮事件*/
+		.mui-content div.flex button{
+			background-color:#4C6FB0;
+			border-radius:5px;
+			color:white;
+			padding: 0;
+			height: 30px;
+			font-size: 12px;
+			margin: 5px;
+			width: 26%;
+			line-height: 30px;
+		}
+
+#codeInput{
+	width: 37%;
+}
+.getCode{
+	width: 30%;
+	font-size: 12px;
+	padding: 0;
+	text-align: center;
+	height: 30px;
+	background: #4C6FB0;
+	color: white;
+	margin: 5px;
+
+}

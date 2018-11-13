@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>website</title>
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="website.css" />
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+	</head>
+
+	<body>
+		<div id='app'>
+			<header class="mui-bar mui-bar-nav flex">
+				<span class="right" v-show="!isAdmin">
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left gobackBtn" @click="appBack"></i>
+					返回
+				</span>
+				<span class="right" v-show="isAdmin" @click="cancel">取消</span>
+				<h1 class="mui-title">网站管理</h1>
+				<span class="revise" @click="adminWeb" v-show="isAdmin">完成</span>
+				<a class="mui-icon mui-icon-bars revise" v-show="!isAdmin" style="text-decoration: none" href="#popover"></a>
+				<div id="popover" class="mui-popover">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell" @click="adminWeb">管理</li>
+						<li class="mui-table-view-cell" @click="gotoAddWeb">新增</li>
+					</ul>
+				</div>
+			</header>
+			<div class="ctt-content" v-show="!isAdmin">
+				<!--<button type="button" class="addBtn" @click="gotoAddWeb">新增网站</button>-->
+			</div>
+			<div v-show="!isContent">
+				<p class="mui-text-center">当前无网页数据</p>
+			</div>
+			<div v-show="isContent && !isAdmin">
+				<li class="mui-table-view-cell app-list flex" v-for="(it, index) in allowList">
+					<span class="app-name website-name" v-html="it.name" @click="edite(it)"></span>
+					<span class="website-locathion website-url" v-html="it.url" @click="edite(it)"></span>
+				</li>
+			</div>
+
+			<div v-show="isContent && isAdmin" class="ctt-content">
+				<li class="mui-table-view-cell app-list flex isAdminList" v-for="(it, index) in list">
+					<span class="app-name website-name" v-html="it.name" @click="edite(it)"></span>
+					<span class="website-locathion website-url" v-html="it.url" @click="edite(it)"></span>
+					<div id="M_Toggle" class="mui-switch mui-switch-mini toggleApp" :class="{'mui-active' : it.userWebsiteStatus == 0}" style="width: 35px; height: 19px;" @click="toggleApp(it,index)">
+						<div class="mui-switch-handle" style="width: 20px; height: 20px; top: -3px;"></div>
+					</div>
+				</li>
+			</div>
+
+			<!-- 模态框部分 -->
+			<div class="spinner" v-show="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-show="!statu"></div>
+		</div>
+	</body>
+
+	<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+	<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+	<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+	<script type="text/javascript" src="../../common.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				isContent: true,
+				statu: false,
+				isAdmin: false,
+				list: [],
+				allowList: [],
+				// rightTxt: '管理',
+				changeList: []
+			},
+			mounted: function() {
+				this.getMsg();
+			},
+			methods: {
+				// 获取数据信息
+				getMsg: function() {
+					//todo  等待后台接口
+					axios({
+						method: 'post',
+						url: JTURLAPI + '/app/website/websiteVoList',
+						data: {
+							userId: window.localStorage.getItem('userId'),
+							token: window.localStorage.getItem('token'),
+							pageSize: 10000,
+							totalCount: 1000
+						},
+						transformRequest: [function(data) {
+							let ret = ''
+							for(let it in data) {
+								ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+							}
+							return ret
+						}],
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						}
+					}).then(function(res) {
+						//						console.log(res);
+						if(res.data.code == 0) {
+							window.app.list = res.data.page.list;
+							for(let i = 0; i < window.app.list.length; i++) {
+								if(window.app.list[i].userWebsiteStatus == 0) {
+									window.app.allowList.push(window.app.list[i])
+								}
+							}
+							if(window.app.list.length > 0) {
+								window.app.isContent = true;
+							} else {
+								window.app.isContent = false;
+							}
+						} else {
+							mui.toast(res.data.msg, {
+								duration: 'long',
+								type: 'div'
+							})
+						}
+						window.app.statu = true;
+					}).catch(function(err) {
+						console.log(err)
+					})
+				},
+				edite: function(it) {
+					if(this.isAdmin == false) {
+						var id = it.id;
+						console.log(id);
+						window.location.href = 'editWebsite.html' + '?' + id;
+					} else {
+						mui.toast('请先退出管理状态', {
+							duration: 'long',
+							type: 'div'
+						})
+					}
+				},
+				adminWeb: function() {
+					mui('.mui-switch')['switch']();
+                    mui('.mui-popover').popover('hide');
+					this.isAdmin = !this.isAdmin;
+					if(this.isAdmin == true) {
+						// this.rightTxt = '完成'
+					} else {
+						// 这里添加完成接口
+						var data = JSON.stringify({
+							"userId": window.localStorage.getItem("userId"),
+							"token": window.localStorage.getItem("token"),
+							"userWebsiteEntityList": this.changeList
+						});
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/website/addWebsite',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then((res) => {
+							if(res.data.code == 0){
+                                location.reload();
+                            }else{
+                                mui.toast(res.data.msg, {
+                                    duration: 'long',
+                                    type: 'div'
+                                })
+							}
+						});
+						// this.rightTxt = '管理'
+					}
+				},
+
+				toggleApp: function(it, index) {
+					//监听开关
+					var statu = hasClass(document.getElementsByClassName('toggleApp')[index], 'mui-active');
+					if(statu) {
+						console.log("你启动了开关" + index);
+						it.userWebsiteStatus = 0;
+						this.changeList.push(it)
+					} else {
+						console.log("你关闭了开关" + index);
+						it.userWebsiteStatus = 1;
+						this.changeList.push(it)
+					}
+				},
+				gotoAddWeb: function() {
+					location.href = 'addWebSite.html';
+				},
+				appBack: function() {
+					location.href = './../../index.html';
+				},
+				cancel: function() {
+					this.isAdmin = !this.isAdmin;
+					// this.rightTxt = '管理'
+				}
+			},
+		})
+	</script>
+
+</html>

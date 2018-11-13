@@ -1,0 +1,72 @@
+body,.mui-input-group{
+	background-color: #fff;
+}
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 40px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+
+.mui-input-group{
+	margin-top: 2rem;
+	font-size: 16px;
+}
+.mui-input-group .mui-input-row:after{
+	background-color: #fff;
+}
+.mui-input-group:before,
+.mui-input-group:after{
+	background-color: #fff;
+}
+.mui-input-row label~input{
+	border-bottom: 0.05rem solid #c8c7cc;
+}
+.mui-input-group{
+	background-color: #fff;
+}
+.mui-input-group .mui-input-row{
+	height: 3.2rem;
+}
+.mui-input-row label{
+	font-size: 18px;
+	width: 30%;
+	padding: 0.75rem 0rem 0.75rem 2.5rem;
+}
+.mui-input-row label~input{
+	text-align: center;
+	float: none;
+	width: 50%;
+}
+
+.mui-input-row .mui-input-clear~.mui-icon-clear{
+	right: 4.5rem;
+}
+
+
+.suggestion-text{
+	width: 96%;
+    margin-left: 2%;
+    margin-top: calc(2% + 40px);
+}
+
+.contact{
+	width: 100%;
+	padding: 0 10px 0 10px;
+	margin: 10px 0;
+}
+
+.contact p{
+	width: 40%;
+	font-size: 12px;
+}
+
+.contact input{
+	border: 1px solid rgba(0, 0, 0, .2);
+    width: 60%;
+    border-radius: 2px;
+    padding-left: 5px;
+}

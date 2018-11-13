@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css">
+    <link rel="stylesheet" href="../../common.css">
+    <link rel="stylesheet" href="fence.css">
+    <link rel="stylesheet" href="../../index.css">
+    <style>
+        .mui-content,
+        .mui-grid-view.mui-grid-9,
+        .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+            background-color: transparent;
+            border: 0;
+        }
+        .mui-grid-view.mui-grid-9 .mui-table-view-cell {
+            width: 132px;
+        }
+        .mui-grid-view.mui-grid-9 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+        }
+        .mui-grid-view.mui-grid-9 .mui-media .mui-icon {
+            font-size: 90px;
+        }
+        .location {
+            color: #0f0;
+        }
+        .fence {
+            color: aqua;
+        }
+        .report {
+            color: blue;
+        }
+        .mui-table-view {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header class="mui-bar mui-bar-nav">
+            <span class="right">
+                <i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="allBack"></i>
+                返回
+            </span>
+            <h1 class="mui-title">定位服务</h1>
+            <!-- <span class="mui-icon mui-icon-plusempty revise" @click="addfence"></span> -->
+        </header>
+
+        <ul class="mui-table-view">
+            <li class="mui-table-view-cell" style="padding: 0 15px;">
+                <a class="mui-navigate-right" href="trackbook.html" style="margin: 0;padding: 0;line-height: 40px;">
+                    <span class="mui-icon mui-icon-location location"></span>
+                    <span class="me">轨迹</span>
+                </a>
+            </li>
+            <li class="mui-table-view-cell" style="padding: 0 15px;">
+                <a class="mui-navigate-right" href="map.html" style="margin: 0;padding: 0;line-height: 40px;">
+                    <span class="mui-icon mui-icon-gear  fence"></span>
+                    <span class="me">电子围栏管理</span>
+                </a>
+            </li>
+            <li class="mui-table-view-cell" style="padding: 0 15px;">
+                <a class="mui-navigate-right" href="report.html" style="margin: 0;padding: 0;line-height: 40px;">
+                    <span class="mui-icon mui-icon-info report"></span>
+                    <span class="me">告警管理</span>
+                </a>
+            </li>
+            
+        </ul>
+
+       <!--  <div class="mui-content">
+            <ul class="mui-table-view mui-grid-view mui-grid-9">
+
+
+
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                    <a href="place.html">
+                        <span class="mui-icon mui-icon-location location"></span>
+                        <div class="mui-media-body">轨迹</div>
+                    </a>
+                </li>
+
+
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                    <a href="map.html">
+                        <span class="mui-icon mui-icon-gear  fence"></span>
+                        <div class="mui-media-body">电子围栏管理</div>
+                    </a>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                    <a href="report.html">
+                        <span class="mui-icon mui-icon-info report"></span>
+                        <div class="mui-media-body">告警管理</div>
+                    </a>
+                </li>
+
+            </ul>
+        </div> -->
+    </div>
+    <script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+    <script type="text/javascript" src="../../plugin/js/vue.js"></script>
+    <script>
+        var vm = new Vue({
+            el: "#app",
+            data: {
+
+            },
+            methods: {
+                allBack: function () {
+                    location.href = "./../../index.html";
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>application</title>
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="application.css" />
+	</head>
+
+	<body>
+		<div id='app'>
+			<header class="mui-bar mui-bar-nav flex">
+				<p class="right" v-show="!isAdmin" @click="webBack">
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></i> 返回
+				</p>
+				<p class="right" v-show="isAdmin" @click="quxiaoEdit">
+					取消
+				</p>
+				<p class="mui-title">应用软件</p>
+				<p class="goAdmin" @click="gotoAdmin" v-html="rightTxt"></p>
+			</header>
+
+			<div v-show="!isContent">
+				<p class="mui-text-center ctt-content">当前无应用软件</p>
+			</div>
+
+			<div v-show="isContent && !isAdmin" class="ctt-content">
+				<li class="mui-table-view-cell app-list flex" v-for="(it, index) in statusList">
+					<!--<img :src="it.icon" alt="">-->
+					<img src="../../images/login.jpg" alt="" />
+					<span class="app-name app-name2" v-html="it.name"></span>
+				</li>
+			</div>
+
+			<div v-show="isContent && isAdmin" class="ctt-content">
+				<li class="mui-table-view-cell app-list flex" v-for="(it, index) in list">
+					<!--<img :src="it.icon" alt="">-->
+					<img src="../../images/login.jpg" alt="" />
+					<span class="app-name app-name2" v-html="it.name"></span>
+					<div class="mui-switch mui-switch-mini toggleApp" @click="toggleApp(it, index)" style="width: 35px; height: 19px;" :class="{'mui-active' : it.userAppStatus == 0}">
+						<div class="mui-switch-handle" style="width: 20px; height: 20px; top: -3px;"></div>
+					</div>
+				</li>
+			</div>
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+	<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+	<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+	<script type="text/javascript" src="../../common.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				isContent: true,
+				statu: false,
+				list: [],
+				statusList: [],
+				isAdmin: false,
+				isChange: false,
+				changeList: [],
+				rightTxt: '管理'
+			},
+			mounted: function() {
+				this.getMsg();
+			},
+			methods: {
+				// 返回上一页
+				webBack: function() {
+					location.href = "./../../index.html";
+				},
+				// 获取数据信息
+				getMsg: function() {
+					axios({
+						method: 'post',
+						url: JTURLAPI + '/app/app/appList',
+						data: {
+							token: window.localStorage.getItem("token"),
+							userId: window.localStorage.getItem("userId"),
+							pageSize: 10000
+						},
+						transformRequest: [function(data) {
+							let ret = ''
+							for(let it in data) {
+								ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+							}
+							return ret
+						}],
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						}
+					}).then(function(res) {
+						if(res.data.code == 0) {
+							window.app.list = res.data.page.list;
+							for(var i = 0; i < window.app.list.length; i++) {
+								if(window.app.list[i].icon == null) {
+									window.app.list[i].icon = '../../images/login.jpg'
+								}
+								// 将打开状态的app集合
+								if(window.app.list[i].userAppStatus == 0) {
+									window.app.statusList.push(window.app.list[i]);
+								}
+							}
+							if(window.app.list.length > 0) {
+								window.app.isContent = true;
+							} else {
+								window.app.isContent = false;
+							}
+						} else {
+							mui.toast(res.data.msg, {
+								duration: 'long',
+								type: 'div'
+							})
+						}
+						window.app.statu = true;
+					}).catch(function(err) {
+						console.log(err);
+					})
+				},
+				//ES6数组去重
+				dedupe: function(array) {
+					return Array.from(new Set(array));
+				},
+				toggleApp: function(it, index) {
+					this.isChange = true;
+					//监听开关
+					var statu = hasClass(document.getElementsByClassName('toggleApp')[index], 'mui-active');
+					if(statu) {
+						//						console.log("你启动了开关" + index);
+						it.userAppStatus = 0
+					} else {
+						//						console.log("你关闭了开关" + index);
+						it.userAppStatus = 1
+					}
+					this.changeList.push(it)
+					this.changeList = this.dedupe(this.changeList)
+				},
+				gotoAdmin: function() {
+					//初始化switch
+					mui('.mui-switch')['switch']()
+					//判断当前状态
+					if(this.isAdmin == true) {
+						// 修改完成后去请求接口
+						if(this.isChange == false) {
+							this.isAdmin = !this.isAdmin
+							this.rightTxt = '管理'
+						} else {
+							//							console.log('改变了')
+							var data = JSON.stringify({
+								"userId": window.localStorage.getItem("userId"),
+								"token": window.localStorage.getItem("token"),
+								"userAppEntityList": this.changeList
+							});
+							axios({
+								method: 'post',
+								url: JTURLAPI + '/app/app/appAdd',
+								data: data,
+								headers: {
+									"Content-Type": "application/json;charset=UTF-8"
+								}
+							}).then((res) => {
+								console.log(res)
+								window.location.href = './application.html'
+							})
+						}
+					} else {
+						// 打开管理状态
+						this.isAdmin = !this.isAdmin
+						this.rightTxt = '完成'
+					}
+
+				},
+				quxiaoEdit: function () {
+                    this.isAdmin = !this.isAdmin;
+                    this.rightTxt = '管理'
+                }
+			}
+		})
+	</script>
+
+</html>

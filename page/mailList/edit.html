@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="edit.css" />
+		<title>编辑联系人</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span @click="cancel">取消</span>
+				<h1 class="mui-title">编辑联系人</h1>
+				<span class="revise" @click="editdone">完成</span>
+			</header>
+
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>姓名：</label>
+					<input type="text" v-model="list.contactName" class="mui-input-clear" placeholder="">
+				</div>
+				<div class="mui-input-row">
+					<label>手机：</label>
+					<input type="tel" v-model="list.contactPhone" class="mui-input-clear" placeholder="">
+				</div>
+				<!--<div class="mui-input-row">
+				<label>邮箱：</label>
+				<input type="tel" class="mui-input-clear" placeholder="support@mockingbot.com">
+			</div>-->
+				<button type="button" class="mui-btn mui-btn-primary" @click="delPerson" style="font-size: 12px; width: 100%;">删除联系人</button>
+			</form>
+		</div>
+
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script>
+			var id;
+			var app = new Vue({
+				el: "#app",
+				data: {
+					list: {
+						contactName: '',
+						contactPhone: '',
+						id: ''
+					}
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+					getMsg: function() {
+						tabId = window.location.href.split('?')[1];
+						this.id = tabId;
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/contact/contactList',
+							params: {
+								token: window.localStorage.getItem("token"),
+								userId: window.localStorage.getItem("userId"),
+								pageSize: 10000
+							},
+						}).then((res) => {
+							this.contactList = res.data.page.list;
+							for(let i = 0; i < this.contactList.length; i++) {
+								//								console.log(tabId);
+								if(this.contactList[i].id == tabId) {
+									window.app.list.contactName = this.contactList[i].contactName;
+									window.app.list.contactPhone = this.contactList[i].contactPhone;
+								}
+							}
+						})
+					},
+					cancel: function() {
+						location.href = "myself.html" + '?' + tabId;
+					},
+					editdone: function() {
+						var data = JSON.stringify({
+							"userId": parseInt(window.localStorage.getItem("userId")),
+							"token": window.localStorage.getItem("token"),
+							"contactName": window.app.list.contactName,
+							"contactPhone": window.app.list.contactPhone,
+							"id": window.app.id
+						});
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/contact/contactUpdate',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then(function(res) {
+							console.log(res);
+							if(res.data.code == 0) {
+								window.location.href = "myself.html" + '?' + tabId;
+							} else {
+								mui.toast('距离上次登录时间过长，请重新登录', {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+						}).catch(function(err) {
+							mui.toast('距离上次登录时间过长，请重新登录', {
+								duration: 'long',
+								type: 'div'
+							})
+						})
+					},
+					delPerson: function() {
+						var btnArray = ['否', '是'];
+						mui.confirm('确认删除吗？', '亲', btnArray, function(e) {
+							if(e.index == 1) {
+								axios({
+									method: 'post',
+									url: JTURLAPI + '/app/contact/contactDelete',
+									data: {
+										id: window.location.href.split('?')[1],
+										userId: window.localStorage.getItem('userId'),
+										token: window.localStorage.getItem('token')
+									},
+									transformRequest: [function(data) {
+										let ret = ''
+										for(let it in data) {
+											ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+										}
+										return ret
+									}],
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded'
+									}
+								}).then(function(res) {
+									if(res.data.code == 0) {
+
+									} else {
+										mui.toast(res.data.msg, {
+											duration: 'long',
+											type: 'div'
+										})
+									}
+
+								}).catch(function(err) {
+									console.log(err)
+								})
+								location.href = '../../index.html';
+							} else {
+
+							}
+						})
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,32 @@
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 40px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+
+img{
+	width: 12.05rem;
+	clear: both; 
+	display: block; 
+	margin: 2rem auto;
+}
+
+.mui-table-view{
+	margin-top: 2rem;
+	font-size: 12px;
+	line-height: 30px;
+}
+.mui-table-view span{
+	color: #B2AAB3;
+	float: right;
+	margin-right: 0.5rem;
+    line-height: 30px;
+}
+.mui-table-view-cell{
+	padding: 0.25rem 1rem;
+}
+

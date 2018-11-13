@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="information.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>个人信息</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span>
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goBack"></i>
+					返回
+				</span>
+				<h1 class="mui-title">个人信息</h1>
+				<span class="revise" @click="submit">修改</span>
+			</header>
+			
+				<div class="img_wrap" style="margin-top: 80px;">
+					<img src="../../images/information.jpg" />
+				</div>
+
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">姓名<span v-html="msg.userName"></span></li>
+					<li class="mui-table-view-cell">性别<span v-html="msg.userSex"></span></li>
+					<li class="mui-table-view-cell">称谓<span v-html="msg.relationship"></span></li>
+					<li class="mui-table-view-cell">手机<span v-html="msg.mobile"></span></li>
+					<li class="mui-table-view-cell">邮箱<span v-html="msg.email"></span></li>
+					<li class="mui-table-view-cell">住址<span v-html="msg.address"></span></li>
+					
+				</ul>
+			
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+		</div>
+
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					statu: false,
+					msg: {
+
+					}
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+					goBack: function() {
+						window.location.href = '../../index.html';
+					},
+					submit: function() {
+						window.location.href = 'revise.html';
+					},
+					getMsg: function() {
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/user/userInfo',
+							data: {
+								token: window.localStorage.getItem("token"),
+								userId: window.localStorage.getItem("userId")
+							},
+							transformRequest: [function(data) {
+								// Do whatever you want to transform the data
+								let ret = ''
+								for(let it in data) {
+									ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+								}
+								return ret
+							}],
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							}
+						}).then(function(res) {
+
+							if(res.data.code == 0) {
+								window.app.msg = res.data.userInfo;
+								if(window.app.msg.name == null) {
+									window.app.msg.name = '您暂未设置'
+								}
+								if(window.app.msg.email == null) {
+									window.app.msg.email = '您暂未设置'
+								}
+								if(window.app.msg.userName == null) {
+									window.app.msg.userName = '您暂未设置'
+								}
+								if(window.app.msg.sex == null) {
+									window.app.msg.sex = '您暂未设置'
+								}else if(window.app.msg.sex == 0){
+									window.app.msg.sex = '男'
+								}else{
+									window.app.msg.sex = '女'
+								}
+
+								console.log(window.app.msg);
+
+							} else {
+								mui.toast('距离上次登录时间过长，请重新登录', {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+
+							window.app.statu = true;
+//							console.log(window.app.statu)
+
+						}).catch(function(err) {
+							mui.toast('距离上次登录时间过长，请重新登录', {
+								duration: 'long',
+								type: 'div'
+							})
+						})
+					}
+
+				},
+
+			})
+		</script>
+	</body>
+
+</html>

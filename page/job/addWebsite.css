@@ -1,0 +1,83 @@
+.right{
+	color: #fff;
+	font-size: 12px;
+	line-height: 42px;
+}
+.revise{
+	float: right;
+	color: #fff;
+	font-size: 12px;
+}
+/*返回样式*/
+.go-back{
+    line-height: 40px;
+    padding-top: 0!important;
+    padding-bottom: 0;
+    color: white;
+	font-size: 20px!important;
+}
+
+/*header标题*/
+
+
+.submit{
+	color: white;
+	font-size: 16px;
+	line-height: 40px;
+	margin-left: 25px;
+}
+
+
+/*content部分*/
+
+.add-content{
+	margin-top: 70px;
+}
+.add-content-web{
+	margin-top: 40px;
+}
+#cgPlce{
+	float: left;
+	border-bottom: 1px solid pink;
+    border-radius: 0;
+    width: 50%;
+    padding-left: 10px;
+}
+
+.mui-input-clear::-webkit-input-placeholder{
+	font-size: 14px;
+}
+
+
+#cgPlce::-webkit-input-placeholder { /* WebKit browsers */
+	font-size: 12px;
+}
+
+/*删除按键的位置*/
+.mui-input-row .mui-input-clear~.mui-icon-clear, .mui-input-row .mui-input-password~.mui-icon-eye, .mui-input-row .mui-input-speech~.mui-icon-speech{
+	right: 15%;
+}
+
+
+/*修改部分框架样式*/
+
+.mui-popup-title{
+	font-size: 12px!important;
+}
+
+.mui-popup-title+.mui-popup-text{
+	font-size: 12px!important;
+}
+
+.mui-popup-button{
+	font-size: 12px!important;
+}
+
+
+/*必选项*/
+.must{
+	color: red;
+	position: absolute;
+	left: 15%;
+	top: 15px;
+}

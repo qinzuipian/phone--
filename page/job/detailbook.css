@@ -1,0 +1,37 @@
+body{
+	background-color: #fff;
+}
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 40px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+.main{
+	color: #3B393B;
+}
+.main img{ 
+	width: 12.05rem;
+	clear: both; 
+	display: block; 
+	margin: 50px auto;
+}
+.main h1{
+	font-size: 23px;
+	text-align: center;
+}
+.main h2{
+	font-size: 17px;
+	text-align: center;
+}
+.main p{
+	font-size: 16px;
+	padding: 1rem 2rem 0rem;
+}
+.main .right {
+	float: right;
+	padding: 0 2.5rem;
+}

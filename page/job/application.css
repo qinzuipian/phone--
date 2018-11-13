@@ -1,0 +1,73 @@
+
+/*返回样式*/
+.right{
+	color: #fff;
+	font-size: 12px;
+	line-height: 42px;
+}
+.revise{
+	float: right;
+	font-weight: 700;
+	color: #fff;
+}
+.go-back{
+	line-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: white;
+}
+
+/*header标题*/
+.head-titie{
+	text-align: center;
+    width: 60%;
+    line-height: 40px;
+    font-size: 16px;
+    color: white;
+}
+
+.app-list{
+	list-style: none;
+	font-size: 12px;
+	display: flex;
+}
+.app-list img{
+	width: 30px;
+	height: 30px;
+	margin-right: 15px;
+}
+.app-name{
+	line-height: 30px;
+}
+.mui-switch{
+    border: 1px solid #BBBBBB;
+}
+.mui-switch .mui-switch-handle{
+	top: 0;
+}
+.mui-switch:before{
+	top: 0;
+}
+
+.head-title-posi{
+	text-align: center;
+    width: 100%;
+    line-height: 40px;
+    font-size: 16px;
+    color: white;
+	position: absolute;
+    top: 0;
+    right: -18px;
+}
+
+.app-name2{
+	width: 80%;
+}
+#mui-title-admin{
+	width: 86%;
+	text-align: right;
+}
+.goAdmin{
+	color: white;
+	font-size: 12px;
+}

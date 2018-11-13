@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<!--自适应屏幕-->
+	<meta name="format-detection" content="telphone=no, email=no" />
+	<!--取消ios自动识别手机号码与邮箱-->
+	<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+	<link rel="stylesheet" href="../../common.css" />
+	<link rel="stylesheet" type="text/css" href="signin.css" />
+	<title>忘记密码</title>
+</head>
+
+<body>
+	<div id="app">
+		<header class="mui-bar mui-bar-nav">
+			<span>
+				<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="appBack"></i>
+				返回
+			</span>
+			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+			<h1 class="mui-title">忘记密码</h1>
+		</header>
+		<div id="spac">
+			<div class="mui-content">
+				<form id='login-form' class="mui-input-group">
+					<div class="mui-input-row">
+						<label>手 机 号:</label>
+						<input type="text" class="mui-input-clear mui-input" v-model="telephone">
+					</div>
+					<div class="mui-input-row">
+						<label>新 密 码:</label>
+						<input type="password" class="mui-input-clear mui-input" v-model="newPassword">
+					</div>
+					<div class="mui-input-row">
+						<label>确认密码:</label>
+						<input type="password" class="mui-input-clear mui-input" v-model="rePassword">
+					</div>
+					<div class="mui-input-row flex">
+						<label>验 证 码:</label>
+						<input type="text" class="mui-input" v-model="obtainCode">
+						<button type="button" class="getCode" @click="getObtainCode">获取验证码</button>
+					</div>
+				</form>
+				<div class="mui-content-padded">
+					<button id='signin' class="mui-btn mui-btn-block mui-btn-primary" @click="forget">提交</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/jscript" src="../../plugin/js/mui.min.js"></script>
+<script type="text/jscript" src="../../plugin/js/vue.js"></script>
+<script type="text/jscript" src="../../common.js"></script>
+<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+<script type="text/javascript">
+	var app=new Vue({
+		el: '#app',
+		data: {
+			telephone: '',
+			newPassword: '',
+			rePassword: '',
+			obtainCode: ''
+		},
+		methods: {
+			getObtainCode: function () {
+				axios({
+					method: 'post',
+					url: JTURLAPI + '/app/user/obtainCode',
+					params: {
+						telephone: this.telephone + '',
+						flag: 1
+					}
+				}).then(function (res) {
+					if (res.data.code == 0) {
+						window.app.obtainCode = res.data.verifyCode
+					} else {
+						mui.toast(res.data.msg, {
+							duration: 'long',
+							type: 'div'
+						})
+					}
+				})
+			},
+//			forget: function () {
+//				if (this.newPassword == this.rePassword) {
+//					axios({
+//						method: 'post',
+//						url: JTURLAPI + '/app/user/forgotPwd',
+//						params: {
+//							telephone: this.telephone + '',
+//							newPassword: this.newPassword + '',
+//							obtainCode: this.obtainCode
+//						}
+//					}).then(function (res) {
+//						if (res.data.code == 0) {
+//							window.location.href = './login.html'
+//						} else {
+//							mui.toast(res.data.msg, {
+//								duration: 'long',
+//								type: 'div'
+//							})
+//						}
+//					}).catch(function (err) {
+//						console.log(err)
+//					})
+//				} else {
+//					mui.toast('两次输入的密码不一致', {
+//						duration: 'login',
+//						type: 'div'
+//					})
+//				}
+//			},
+			appBack: function() {
+					location.href = 'login.html';
+			},
+			forget: function() {
+					location.href = 'login.html';
+				}
+		}
+	})
+</script>
+</html>

@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>课程表</title>
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css">
+    <link rel="stylesheet" href="../../plugin/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../../common.css">
+    <link rel="stylesheet" href="course.css">
+    <style>
+        .line {
+            top: 0;
+            width: 116px;
+        }
+
+        .t_left table td input,
+        .t_r_content table td input {
+            background-color: transparent;
+            border: none;
+            text-align: center;
+            padding: 0;
+            width: 100px;
+            height: auto;
+            margin-bottom: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <div class="top">
+        <!-- 头部 -->
+        <header class="mui-bar mui-bar-nav">
+					<span>
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goback"></i>
+					返回
+				</span>
+            <h1 class="mui-title">课程表</h1>
+            <span class="revise" @click="submitCourse">完成</span>
+        </header>
+        <h2 style="margin-top: 40px;line-height: 30px;text-align: center;">2018年个人课程表</h2>
+    </div>
+
+    <div class="flex course-content" style="margin-top: 70px" v-if="isContent">
+        <div class="flex course-left">
+            <div class="left-msg">
+                <p style="background: rgb(135, 135, 135)"></p>
+                <p>一</p>
+                <p>二</p>
+                <p>三</p>
+                <p>四</p>
+                <p>五</p>
+                <p>六</p>
+                <p>七</p>
+                <p>八</p>
+                <!--<p>九</p>-->
+            </div>
+            <div class="left-msg left-msg-right">
+                <p style="background: rgb(135, 135, 135)"></p>
+                <p>
+                    <input id='top1'
+                           data-options='{"type":"time"}' class="btnTop1 result"
+                           placeholder=""
+                           @click="selectDate('top1', 'btnTop1')"
+                           v-model="top1"
+                           readonly
+                    />
+                </p>
+                <p style="background: #f6f6f6;">
+                    <input id='bottom1'
+                           data-options='{"type":"time"}' class="btnBottom1 result"
+                           placeholder=""
+                           @click="selectDate('bottom1','btnBottom1')"
+                           v-model="bottom1"
+                           readonly
+                    />
+                </p>
+                <p style="background: rgb(170, 238, 246);">
+                    <input id='top2'
+                           data-options='{"type":"time"}' class="btnTop2 result"
+                           placeholder=""
+                           @click="selectDate('top2','btnTop2')"
+                           v-model="top2"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='bottom2'
+                           data-options='{"type":"time"}' class="btnBottom2 result"
+                           placeholder=""
+                           @click="selectDate('bottom2','btnBottom2')"
+                           v-model="bottom2"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='top3'
+                           data-options='{"type":"time"}' class="btnTop3 result"
+                           placeholder=""
+                           @click="selectDate('top3','btnTop3')"
+                           v-model="top3"
+                           readonly
+                    />
+                </p>
+                <p style="background: #f6f6f6;">
+                    <input id='bottom3'
+                           data-options='{"type":"time"}' class="btnBottom3 result"
+                           placeholder=""
+                           @click="selectDate('bottom3','btnBottom3')"
+                           v-model="bottom3"
+                           readonly
+                    />
+                </p>
+                <p style="background: rgb(170, 238, 246);">
+                    <input id='top4'
+                           data-options='{"type":"time"}' class="btnTop4 result"
+                           placeholder=""
+                           @click="selectDate('top4','btnTop4')"
+                           v-model="top4"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='bottom4'
+                           data-options='{"type":"time"}' class="btnBottom4 result"
+                           placeholder=""
+                           @click="selectDate('bottom4','btnBottom4')"
+                           v-model="bottom4"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='top5'
+                           data-options='{"type":"time"}' class="btnTop5 result"
+                           placeholder=""
+                           @click="selectDate('top5','btnTop5')"
+                           v-model="top5"
+                           readonly
+                    />
+                </p>
+                <p style="background: #f6f6f6;">
+                    <input id='bottom5'
+                           data-options='{"type":"time"}' class="btnBottom5 result"
+                           placeholder=""
+                           @click="selectDate('bottom5','btnBottom5')"
+                           v-model="bottom5"
+                           readonly
+                    />
+                </p>
+                <p style="background: rgb(170, 238, 246);">
+                    <input id='top6'
+                           data-options='{"type":"time"}' class="btnTop6 result"
+                           placeholder=""
+                           @click="selectDate('top6','btnTop6')"
+                           v-model="top6"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='bottom6'
+                           data-options='{"type":"time"}' class="btnBottom6 result"
+                           placeholder=""
+                           @click="selectDate('bottom6','btnBottom6')"
+                           v-model="bottom6"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='top7'
+                           data-options='{"type":"time"}' class="btnTop7 result"
+                           placeholder=""
+                           @click="selectDate('top7','btnTop7')"
+                           v-model="top7"
+                           readonly
+                    />
+                </p>
+                <p style="background: #f6f6f6;">
+                    <input id='bottom7'
+                           data-options='{"type":"time"}' class="btnBottom7 result"
+                           placeholder=""
+                           @click="selectDate('bottom7','btnBottom7')"
+                           v-model="bottom7"
+                           readonly
+                    />
+                </p>
+                <p style="background: rgb(170, 238, 246);">
+                    <input id='top8'
+                           data-options='{"type":"time"}' class="btnTop8 result"
+                           placeholder=""
+                           @click="selectDate('top8','btnTop8')"
+                           v-model="top8"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <p>
+                    <input id='bottom8'
+                           data-options='{"type":"time"}' class="btnBottom8 result"
+                           placeholder=""
+                           @click="selectDate('bottom8','btnBottom8')"
+                           v-model="bottom8"
+                           readonly
+                           style="background: rgb(170, 238, 246);"
+                    />
+                </p>
+                <!--<p>-->
+                    <!--<input id='top9'-->
+                           <!--data-options='{"type":"time"}' class="btnTop9 result"-->
+                           <!--placeholder=""-->
+                           <!--@click="selectDate('top9','btnTop9')"-->
+                           <!--v-model="top9"-->
+                    <!--/>-->
+                <!--</p>-->
+                <!--<p>-->
+                    <!--<input id='bottom9'-->
+                           <!--data-options='{"type":"time"}' class="btnBottom9 result"-->
+                           <!--placeholder=""-->
+                           <!--@click="selectDate('bottom9','btnBottom9')"-->
+                           <!--v-model="bottom9"-->
+                    <!--/>-->
+                <!--</p>-->
+            </div>
+        </div>
+        <div class="flex course-right">
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周一</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi1')" class="customSelect" v-model="yi1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi2')" class="customSelect" v-model="yi2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi3')" class="customSelect" v-model="yi3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi4')" class="customSelect" v-model="yi4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi5')" class="customSelect" v-model="yi5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi6')" class="customSelect" v-model="yi6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi7')" class="customSelect" v-model="yi7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'yi8')" class="customSelect" v-model="yi8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'yi9')" class="customSelect" v-model="yi9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周二</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er1')" class="customSelect" v-model="er1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er2')" class="customSelect" v-model="er2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er3')" class="customSelect" v-model="er3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er4')" class="customSelect" v-model="er4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er5')" class="customSelect" v-model="er5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er6')" class="customSelect" v-model="er6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er7')" class="customSelect" v-model="er7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'er8')" class="customSelect" v-model="er8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'er9')" class="customSelect" v-model="er9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周三</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san1')" class="customSelect" v-model="san1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san2')" class="customSelect" v-model="san2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san3')" class="customSelect" v-model="san3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san4')" class="customSelect" v-model="san4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san5')" class="customSelect" v-model="san5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san6')" class="customSelect" v-model="san6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san7')" class="customSelect" v-model="san7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'san8')" class="customSelect" v-model="san8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'san9')" class="customSelect" v-model="san9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周四</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si1')" class="customSelect" v-model="si1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si2')" class="customSelect" v-model="si2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si3')" class="customSelect" v-model="si3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si4')" class="customSelect" v-model="si4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si5')" class="customSelect" v-model="si5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si6')" class="customSelect" v-model="si6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si7')" class="customSelect" v-model="si7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'si8')" class="customSelect" v-model="si8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'si9')" class="customSelect" v-model="si9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周五</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu1')" class="customSelect" v-model="wu1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu2')" class="customSelect" v-model="wu2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu3')" class="customSelect" v-model="wu3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu4')" class="customSelect" v-model="wu4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu5')" class="customSelect" v-model="wu5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu6')" class="customSelect" v-model="wu6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu7')" class="customSelect" v-model="wu7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'wu8')" class="customSelect" v-model="wu8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'wu9')" class="customSelect" v-model="wu9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周六</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu1')" class="customSelect" v-model="liu1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu2')" class="customSelect" v-model="liu2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu3')" class="customSelect" v-model="liu3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu4')" class="customSelect" v-model="liu4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu5')" class="customSelect" v-model="liu5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu6')" class="customSelect" v-model="liu6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu7')" class="customSelect" v-model="liu7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'liu8')" class="customSelect" v-model="liu8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'liu9')" class="customSelect" v-model="liu9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135, 135, 135)">周日</p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri1')" class="customSelect" v-model="ri1">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri2')" class="customSelect" v-model="ri2">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri3')" class="customSelect" v-model="ri3">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri4')" class="customSelect" v-model="ri4">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri5')" class="customSelect" v-model="ri5">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri6')" class="customSelect" v-model="ri6">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri7')" class="customSelect" v-model="ri7">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <p>
+                    <select name="" @change="changeCourse($event,'ri8')" class="customSelect" v-model="ri8">
+                        <option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>
+                    </select>
+                </p>
+                <!--<p>-->
+                    <!--<select name="" @change="changeCourse($event,'ri9')" class="customSelect" v-model="ri9">-->
+                        <!--<option value="" v-for="it in courseSelect" :value="it" v-html="it"></option>-->
+                    <!--</select>-->
+                <!--</p>-->
+            </div>
+        </div>
+        <!--<div class="flex course-remark">-->
+            <!--<p class="remark-title">备注</p>-->
+        <!--</div>-->
+        <!--<div class="flex remark-msg">-->
+            <!--<p><input type="text" class="remarkCourse" v-model="remark"></p>-->
+        <!--</div>-->
+
+    </div>
+</div>
+<script src="../../plugin/js/mui.min.js"></script>
+<script src="../../plugin/js/mui.picker.min.js"></script>
+<script src="../../plugin/js/vue.js"></script>
+<script src="../../plugin/js/axios.js"></script>
+<script src="../../common.js"></script>
+<script>
+    // function scrollall() {
+    //     var a = document.getElementById("t_r_content").scrollTop;
+    //     var b = document.getElementById("t_r_content").scrollLeft;
+    //     document.getElementById("cl_freeze").scrollTop = a;
+    //     document.getElementById("t_r_t").scrollLeft = b;
+    // }
+
+    var app = new Vue({
+        el: "#app",
+        data: {
+            isContent: true,
+            list: [],
+            courseSelect: ['音乐','语文','数学','英语','思品','自然','美术','体育','劳动','自定义',' '],
+
+            top1: '',
+            bottom1: '',
+            top2: '',
+            bottom2: '',
+            top3: '',
+            bottom3: '',
+            top4: '',
+            bottom4: '',
+            top5: '',
+            bottom5: '',
+            top6: '',
+            bottom6: '',
+            top7: '',
+            bottom7: '',
+            top8: '',
+            bottom8: '',
+            top9: '',
+            bottom9: '',
+
+            // indexId: '',
+            yi1: '',
+            yi2: '',
+            yi3: '',
+            yi4: '',
+            yi5: '',
+            yi6: '',
+            yi7: '',
+            yi8: '',
+            yi9: '',
+
+            er1: '',
+            er2: '',
+            er3: '',
+            er4: '',
+            er5: '',
+            er6: '',
+            er7: '',
+            er8: '',
+            er9: '',
+
+            san1: '',
+            san2: '',
+            san3: '',
+            san4: '',
+            san5: '',
+            san6: '',
+            san7: '',
+            san8: '',
+            san9: '',
+
+            si1: '',
+            si2: '',
+            si3: '',
+            si4: '',
+            si5: '',
+            si6: '',
+            si7: '',
+            si8: '',
+            si9: '',
+
+            wu1: '',
+            wu2: '',
+            wu3: '',
+            wu4: '',
+            wu5: '',
+            wu6: '',
+            wu7: '',
+            wu8: '',
+            wu9: '',
+
+            liu1: '',
+            liu2: '',
+            liu3: '',
+            liu4: '',
+            liu5: '',
+            liu6: '',
+            liu7: '',
+            liu8: '',
+            liu9: '',
+
+            ri1: '',
+            ri2: '',
+            ri3: '',
+            ri4: '',
+            ri5: '',
+            ri6: '',
+            ri7: '',
+            ri8: '',
+            ri9: '',
+
+            remark: '',
+
+
+        },
+        mounted: function () {
+            this.getMsg();
+            this.getSelectItem();
+        },
+        methods: {
+            goback: function () {
+                window.location.href = "course.html";
+            },
+            getMsg: function () {
+
+                window.localStorage.setItem('list', this.courseSelect);
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/course/list',
+                    // data: {
+                    //     userId: window.localStorage.getItem('userId'),
+                    //     token: window.localStorage.getItem('token'),
+                    //     pageSize: 10000
+                    // },
+                    // transformRequest: [function (data) {
+                    //     let ret = ''
+                    //     for (let it in data) {
+                    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                    //     }
+                    //     return ret
+                    // }],
+                    // headers: {
+                    //     'Content-Type': 'application/x-www-form-urlencoded'
+                    // }
+                    params: {
+                        // userId: window.localStorage.getItem('userId'),
+                        // token: window.localStorage.getItem('token'),
+                        // pageSize: 10000,
+                        deviceId: window.localStorage.getItem('deviceId')
+                    },
+                }).then((res) => {
+                    if (res.data.code == 0) {
+
+                        var corTime = res.data.data.periods;
+                        var corNum = res.data.data.courses;
+
+                        for(var i = 0; i < corTime.length; i++){
+                            switch (corTime[i].periodNum){
+                                case 1 :
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top1 = '';
+                                        this.bottom1 = '';
+                                    }else{
+                                        this.top1 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom1 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 2:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top2 = '';
+                                        this.bottom2 = '';
+                                    }else{
+                                        this.top2 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom2 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 3:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top3 = '';
+                                        this.bottom3 = '';
+                                    }else{
+                                        this.top3 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom3 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 4:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top4 = '';
+                                        this.bottom4 = '';
+                                    }else{
+                                        this.top4 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom4 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 5:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top5 = '';
+                                        this.bottom5 = '';
+                                    }else{
+                                        this.top5 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom5 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 6:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top6 = '';
+                                        this.bottom6 = '';
+                                    }else{
+                                        this.top6 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom6 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 7:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top7 = '';
+                                        this.bottom7 = '';
+                                    }else{
+                                        this.top7 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom7 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                                case 8:
+                                    if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                        this.top8 = '';
+                                        this.bottom8 = '';
+                                    }else{
+                                        this.top8 = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                        this.bottom8 = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                    }
+                                    break;
+                            }
+
+                        };
+
+                        for(var j = 0; j < corNum.length; j ++){
+                            if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 1){
+                                this.yi1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 2){
+                                this.yi2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 3){
+                                this.yi3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 4){
+                                this.yi4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 5){
+                                this.yi5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 6){
+                                this.yi6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 7){
+                                this.yi7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 8){
+                                this.yi8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 9){
+                                this.yi9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 1){
+                                this.er1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 2){
+                                this.er2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 3){
+                                this.er3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 4){
+                                this.er4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 5){
+                                this.er5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 6){
+                                this.er6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 7){
+                                this.er7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 8){
+                                this.er8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 9){
+                                this.er9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 1){
+                                this.san1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 2){
+                                this.san2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 3){
+                                this.san3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 4){
+                                this.san4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 5){
+                                this.san5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 6){
+                                this.san6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 7){
+                                this.san7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 8){
+                                this.san8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 9){
+                                this.san9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 1){
+                                this.si1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 2){
+                                this.si2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 3){
+                                this.si3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 4){
+                                this.si4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 5){
+                                this.si5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 6){
+                                this.si6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 7){
+                                this.si7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 8){
+                                this.si8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 9){
+                                this.si9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 1){
+                                this.wu1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 2){
+                                this.wu2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 3){
+                                this.wu3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 4){
+                                this.wu4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 5){
+                                this.wu5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 6){
+                                this.wu6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 7){
+                                this.wu7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 8){
+                                this.wu8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 9){
+                                this.wu9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 1){
+                                this.liu1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 2){
+                                this.liu2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 3){
+                                this.liu3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 4){
+                                this.liu4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 5){
+                                this.liu5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 6){
+                                this.liu6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 7){
+                                this.liu7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 8){
+                                this.liu8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 9){
+                                this.liu9 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 1){
+                                this.ri1 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 2){
+                                this.ri2 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 3){
+                                this.ri3 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 4){
+                                this.ri4 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 5){
+                                this.ri5 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 6){
+                                this.ri6 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 7){
+                                this.ri7 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 8){
+                                this.ri8 = corNum[j].courseName
+                            }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 9){
+                                this.ri9 = corNum[j].courseName
+                            }
+                        }
+
+                        
+                    }else {
+                        mui.toast(res.data.msg, {
+                            duration: 'long',
+                            type: 'div'
+                        })
+                    }
+
+                }).catch(function (err) {
+                    console.log(err)
+                })
+
+            },
+            submitCourse: function () {
+                // mui.alert('提交成功', function () {
+                //     window.location.href = './course.html'
+                // });
+
+                var userId = window.localStorage.getItem("userId");
+                var data = JSON.stringify({
+                    "userId": window.localStorage.getItem("userId"),
+                    "token": window.localStorage.getItem("token"),
+                    "data": {
+                        courses: [
+                            {
+                                courseWeeks: 1,
+                                periodNum: 1,
+                                courseName: this.yi1
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 2,
+                                courseName: this.yi2
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 3,
+                                courseName: this.yi3
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 4,
+                                courseName: this.yi4
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 5,
+                                courseName: this.yi5
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 6,
+                                courseName: this.yi6
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 7,
+                                courseName: this.yi7
+                            },
+                            {
+                                courseWeeks: 1,
+                                periodNum: 8,
+                                courseName: this.yi8
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 1,
+                                courseName: this.er1
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 2,
+                                courseName: this.er2
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 3,
+                                courseName: this.er3
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 4,
+                                courseName: this.er4
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 5,
+                                courseName: this.er5
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 6,
+                                courseName: this.er6
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 7,
+                                courseName: this.er7
+                            },
+                            {
+                                courseWeeks: 2,
+                                periodNum: 8,
+                                courseName: this.er8
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 1,
+                                courseName: this.san1
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 2,
+                                courseName: this.san2
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 3,
+                                courseName: this.san3
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 4,
+                                courseName: this.san4
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 5,
+                                courseName: this.san5
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 6,
+                                courseName: this.san6
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 7,
+                                courseName: this.san7
+                            },
+                            {
+                                courseWeeks: 3,
+                                periodNum: 8,
+                                courseName: this.san8
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 1,
+                                courseName: this.si1
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 2,
+                                courseName: this.si2
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 3,
+                                courseName: this.si3
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 4,
+                                courseName: this.si4
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 5,
+                                courseName: this.si5
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 6,
+                                courseName: this.si6
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 7,
+                                courseName: this.si7
+                            },
+                            {
+                                courseWeeks: 4,
+                                periodNum: 8,
+                                courseName: this.si8
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 1,
+                                courseName: this.wu1
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 2,
+                                courseName: this.wu2
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 3,
+                                courseName: this.wu3
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 4,
+                                courseName: this.wu4
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 5,
+                                courseName: this.wu5
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 6,
+                                courseName: this.wu6
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 7,
+                                courseName: this.wu7
+                            },
+                            {
+                                courseWeeks: 5,
+                                periodNum: 8,
+                                courseName: this.wu8
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 1,
+                                courseName: this.liu1
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 2,
+                                courseName: this.liu2
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 3,
+                                courseName: this.liu3
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 4,
+                                courseName: this.liu4
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 5,
+                                courseName: this.liu5
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 6,
+                                courseName: this.liu6
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 7,
+                                courseName: this.liu7
+                            },
+                            {
+                                courseWeeks: 6,
+                                periodNum: 8,
+                                courseName: this.liu8
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 1,
+                                courseName: this.ri1
+                            },,
+                            {
+                                courseWeeks: 7,
+                                periodNum: 2,
+                                courseName: this.ri2
+                            },,
+                            {
+                                courseWeeks: 7,
+                                periodNum: 3,
+                                courseName: this.ri3
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 4,
+                                courseName: this.ri4
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 5,
+                                courseName: this.ri5
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 6,
+                                courseName: this.ri6
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 7,
+                                courseName: this.ri7
+                            },
+                            {
+                                courseWeeks: 7,
+                                periodNum: 8,
+                                courseName: this.ri8
+                            }
+                        ],
+                        periods: [
+                            {
+                                periodNum: 1,
+                                startTime: this.top1,
+                                endTime: this.bottom1,
+                                periodInterval: 0
+                            },
+                            {
+                                periodNum: 2,
+                                startTime: this.top2,
+                                endTime: this.bottom2,
+                                periodInterval: 0
+                            },
+                            {
+                                periodNum: 3,
+                                startTime: this.top3,
+                                endTime: this.bottom3,
+                                periodInterval: 0
+                            },
+                            {
+                                periodNum: 4,
+                                startTime: this.top4,
+                                endTime: this.bottom4,
+                                periodInterval: 0
+                            },
+                            {
+                                periodNum: 5,
+                                startTime: this.top5,
+                                endTime: this.bottom5,
+                                periodInterval: 1
+                            },
+                            {
+                                periodNum: 6,
+                                startTime: this.top6,
+                                endTime: this.bottom6,
+                                periodInterval: 1
+                            },
+                            {
+                                periodNum: 7,
+                                startTime: this.top7,
+                                endTime: this.bottom7,
+                                periodInterval: 1
+                            },
+                            {
+                                periodNum: 8,
+                                startTime: this.top8,
+                                endTime: this.bottom8,
+                                periodInterval: 1
+                            }
+                        ]
+                    }
+                });
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/course/batchUpdate',
+                    data: data,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    }
+                }).then((res) => {
+                    if (res.data.code == 0){
+                        mui.alert('' +
+                            '修改成功', function () {
+                            // window.location.href = './course.html'
+                        });
+                    }else{
+                        mui.toast(res.data.msg, {
+                            duration: 'long',
+                            type: 'div'
+                        })
+                    }
+                });
+
+            },
+            // y 为插件初始化的id    z为插件初始化的class
+            selectDate: function (y, z) {
+                (function ($) {
+                    $.init();
+                    var result = $("#" + y)[0];
+                    var btns = $('.' + z);
+                    btns.each(function (i, btn) {
+                        // btn.addEventListener('tap', function () {
+                        var _self = this;
+                        if (_self.picker) {
+                            _self.picker.show(function (rs) {
+                                result.value = rs.text;
+                                _self.picker.dispose();
+                                _self.picker = null;
+                            });
+                        } else {
+                            var optionsJson = this.getAttribute('data-options') || '{}';
+                            var options = JSON.parse(optionsJson);
+                            var id = this.getAttribute('id');
+                            /*
+                             * 首次显示时实例化组件
+                             * 示例为了简洁，将 options 放在了按钮的 dom 上
+                             * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+                             */
+                            _self.picker = new $.DtPicker(options);
+                            _self.picker.show(function (rs) {
+                                /*
+                                 * rs.value 拼合后的 value
+                                 * rs.text 拼合后的 text
+                                 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+                                 * rs.m 月，用法同年
+                                 * rs.d 日，用法同年
+                                 * rs.h 时，用法同年
+                                 * rs.i 分（minutes 的第二个字母），用法同年
+                                 */
+                                result.value = rs.text;
+                                // var defineStr = "window.app."+y.toString();
+                                // var defineStr = eval("window.app."+y.toString());
+                                eval("window.app." + y.toString() + " = result.value;");
+                                // defineStr = result.value
+                                /*
+                                 * 返回 false 可以阻止选择框的关闭
+                                 * return false;
+                                 */
+                                /*
+                                 * 释放组件资源，释放后将将不能再操作组件
+                                 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+                                 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+                                 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+                                 */
+                                _self.picker.dispose();
+                                _self.picker = null;
+                            });
+                        }
+
+                        // }, false);
+                    });
+                })(mui);
+                // mui.init({
+                //     //禁用mui tap监听 否则点击生日选择会弹出两次
+                //     gestureConfig:{
+                //         tap:false
+                //     }
+                // });
+            },
+            changeCourse: function (ev, y) {
+
+                if (ev.target.value == '自定义') {
+                    var btnArray = ['自定义课程'];
+                    mui.prompt('请输入需要增加的课程，并在完成后重新选择', '', btnArray, function(e) {
+                        if (e.index == 0) {
+
+
+                        } else {
+                            var sleObj = '';
+                            sleObj = e.value;
+                            // 给select下拉选择框数据的数组从头部添加
+                            axios({
+                                method: 'post',
+                                url: JTURLAPI + '/app/course/addOrgCourse',
+                                params: {
+                                    userId: localStorage.getItem('userId'),
+                                    token: localStorage.getItem('token'),
+                                    courseName: sleObj
+                                }
+                            }).then((res) => {
+                                if (res.data.code == 0){
+                                    window.app.courseSelect.unshift(sleObj);
+                                }
+                            });
+                            eval("this." + y.toString() + " = sleObj");
+                        }
+                    })
+                } else {
+                    eval("this." + y.toString() + " = ev.target.value");
+                }
+            },
+            getSelectItem: function () {
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/course/orgCourseList',
+                    params: {
+                        userId: localStorage.getItem('userId'),
+                        token: localStorage.getItem('token')
+                    }
+                }).then((res) => {
+                    if (res.data.code == 0){
+                        for(var i = 0; i < res.data.list.length; i++){
+                            window.app.courseSelect.unshift(res.data.list[i]);
+                        }
+                    }
+                    console.log(res.data.code)
+                });
+            }
+
+        },
+        created() {
+
+        }
+    })
+</script>
+</body>
+
+</html>

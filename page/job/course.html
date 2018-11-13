@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>课程表</title>
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css">
+    <link rel="stylesheet" href="../../plugin/css/mui.picker.min.css">
+    <link rel="stylesheet" href="../../common.css">
+    <link rel="stylesheet" href="course.css">
+
+</head>
+
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <header class="mui-bar mui-bar-nav" style="position: fixed;">
+				<span>
+					<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goback"></i>
+					返回
+				</span>
+        <h1 class="mui-title">课程表</h1>
+        <a class="mui-icon mui-icon-bars revise" style="text-decoration: none" href="#popover"></a>
+        <div id="popover" class="mui-popover">
+            <ul class="mui-table-view">
+                <li v-show="isContent"class="mui-table-view-cell"><a href="./editCourse.html">编辑</a></li>
+                <li v-show="!isContent" class="mui-table-view-cell"><a href="./firstcourse.html">新增</a></li>
+                <li class="mui-table-view-cell" @click="closeTabView" v-html="courseStatus"></li>
+            </ul>
+        </div>
+    </header>
+    <div v-show="!isContent">
+        <p class="mui-text-center ctt-content" style="margin-top: 60px;">当前无课程表</p>
+    </div>
+    <p class="ctt-content mui-text-center" v-show="isContent">{{timeDate}}年{{type}}半学期课程表</p>
+    <div class="flex course-content" v-show="isContent">
+        <div class="flex course-left">
+            <div class="left-msg">
+                <p style="background: rgb(135,135,135); width: calc(100% + 1px);"></p>
+                <p>一</p>
+                <p>二</p>
+                <p>三</p>
+                <p>四</p>
+                <p>五</p>
+                <p>六</p>
+                <p>七</p>
+                <p>八</p>
+                <!--<p>九</p>-->
+            </div>
+            <div class="left-msg left-msg-right">
+                <p style="background: rgb(135,135,135);"></p>
+                <p v-html="time.diyi"></p>
+                <p v-html="time.dier" style="background: white;"></p>
+                <p v-html="time.disan" style="background: rgb(170, 238, 246);"></p>
+                <p v-html="time.disi"></p>
+                <p v-html="time.diwu"></p>
+                <p v-html="time.diliu" style="background: white;"></p>
+                <p v-html="time.diqi" style="background: rgb(170, 238, 246);"></p>
+                <p v-html="time.diba"></p>
+                <p v-html="time.dijiu"></p>
+                <p v-html="time.dishi" style="background: white;"></p>
+                <p v-html="time.dishiyi" style="background: rgb(170, 238, 246);"></p>
+                <p v-html="time.dishier"></p>
+                <p v-html="time.dishisan"></p>
+                <p v-html="time.dishisi" style="background: white;"></p>
+                <p v-html="time.dishiwu" style="background: rgb(170, 238, 246);"></p>
+                <p v-html="time.dishiliu"></p>
+                <!--<p v-html="time.dishiqi"></p>-->
+                <!--<p v-html="time.dishiba"></p>-->
+            </div>
+        </div>
+        <div class="flex course-right">
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周一</p>
+                <p v-html="monday.yi"></p>
+                <p v-html="monday.er"></p>
+                <p v-html="monday.san"></p>
+                <p v-html="monday.si"></p>
+                <p v-html="monday.wu"></p>
+                <p v-html="monday.liu"></p>
+                <p v-html="monday.qi"></p>
+                <p v-html="monday.ba"></p>
+                <!--<p v-html="monday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周二</p>
+                <p v-html="tuesday.yi"></p>
+                <p v-html="tuesday.er"></p>
+                <p v-html="tuesday.san"></p>
+                <p v-html="tuesday.si"></p>
+                <p v-html="tuesday.wu"></p>
+                <p v-html="tuesday.liu"></p>
+                <p v-html="tuesday.qi"></p>
+                <p v-html="tuesday.ba"></p>
+                <!--<p v-html="tuesday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周三</p>
+                <p v-html="wednesday.yi"></p>
+                <p v-html="wednesday.er"></p>
+                <p v-html="wednesday.san"></p>
+                <p v-html="wednesday.si"></p>
+                <p v-html="wednesday.wu"></p>
+                <p v-html="wednesday.liu"></p>
+                <p v-html="wednesday.qi"></p>
+                <p v-html="wednesday.ba"></p>
+                <!--<p v-html="wednesday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周四</p>
+                <p v-html="thursday.yi"></p>
+                <p v-html="thursday.er"></p>
+                <p v-html="thursday.san"></p>
+                <p v-html="thursday.si"></p>
+                <p v-html="thursday.wu"></p>
+                <p v-html="thursday.liu"></p>
+                <p v-html="thursday.qi"></p>
+                <p v-html="thursday.ba"></p>
+                <!--<p v-html="thursday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周五</p>
+                <p v-html="friday.yi"></p>
+                <p v-html="friday.er"></p>
+                <p v-html="friday.san"></p>
+                <p v-html="friday.si"></p>
+                <p v-html="friday.wu"></p>
+                <p v-html="friday.liu"></p>
+                <p v-html="friday.qi"></p>
+                <p v-html="friday.ba"></p>
+                <!--<p v-html="friday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周六</p>
+                <p v-html="saturday.yi"></p>
+                <p v-html="saturday.er"></p>
+                <p v-html="saturday.san"></p>
+                <p v-html="saturday.si"></p>
+                <p v-html="saturday.wu"></p>
+                <p v-html="saturday.liu"></p>
+                <p v-html="saturday.qi"></p>
+                <p v-html="saturday.ba"></p>
+                <!--<p v-html="saturday.jiu"></p>-->
+            </div>
+            <div class="right-msg">
+                <p style="background: rgb(135,135,135);">周日</p>
+                <p v-html="sunday.yi"></p>
+                <p v-html="sunday.er"></p>
+                <p v-html="sunday.san"></p>
+                <p v-html="sunday.si"></p>
+                <p v-html="sunday.wu"></p>
+                <p v-html="sunday.liu"></p>
+                <p v-html="sunday.qi"></p>
+                <p v-html="sunday.ba"></p>
+                <!--<p v-html="sunday.jiu"></p>-->
+            </div>
+        </div>
+        <!--<div class="flex course-remark">-->
+            <!--<p class="remark-title">备注</p>-->
+        <!--</div>-->
+        <!--<div class="flex remark-msg">-->
+            <!--<p v-html="remark"></p>-->
+        <!--</div>-->
+
+    </div>
+</div>
+<script src="../../plugin/js/mui.min.js"></script>
+<script src="../../plugin/js/mui.picker.min.js"></script>
+<script src="../../plugin/js/vue.js"></script>
+<script src="../../plugin/js/axios.js"></script>
+<script src="../../common.js"></script>
+<script>
+    //		function scrollall() {
+    //			var a = document.getElementById("t_r_content").scrollTop;
+    //			var b = document.getElementById("t_r_content").scrollLeft;
+    //			document.getElementById("cl_freeze").scrollTop = a;
+    //			document.getElementById("t_r_t").scrollLeft = b;
+    //		}
+    var app = new Vue({
+        el: "#app",
+        data: {
+            isContent: true,
+            list: [],
+            timeDate: '2018',
+            type: '上',
+            time: {
+                diyi: '',
+                dier: '',
+                disan: '',
+                disi: '',
+                diwu: '',
+                diliu: '',
+                diqi: '',
+                diba: '',
+                dijiu: '',
+                dishi: '',
+                dishiyi: '',
+                dishier: '',
+                dishisan: '',
+                dishisi: '',
+                dishiwu: '',
+                dishiliu: '',
+                dishiqi: '',
+                dishiba: ''
+            },
+            monday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            tuesday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            wednesday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            thursday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            friday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            saturday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            sunday: {
+                yi: '',
+                er: '',
+                san: '',
+                si: '',
+                wu: '',
+                liu: '',
+                qi: '',
+                ba: '',
+                jiu: ''
+            },
+            remark: '',
+            courseStatus: '',
+            courseStatusNum: 1
+        },
+        mounted: function () {
+            this.getMsg();
+        },
+        methods: {
+            goback: function () {
+                window.location.href = "../../index.html";
+            },
+            getMsg: function () {
+
+                if(window.localStorage.getItem('courseStatus') == 0){
+                    this.courseStatus = '关闭课程表';
+                    this.courseStatusNum = 1
+                }else{
+                    this.courseStatus = '打开课程表';
+                    this.courseStatusNum = 0
+                }
+
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/course/list',
+                    params: {
+                        // userId: window.localStorage.getItem('userId'),
+                        // token: window.localStorage.getItem('token'),
+                        // pageSize: 10000,
+                        deviceId: window.localStorage.getItem('deviceId')
+                    },
+                    // transformRequest: [function (data) {
+                    //     let ret = '';
+                    //     for (let it in data) {
+                    //         ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                    //     }
+                    //     return ret
+                    // }],
+                    // headers: {
+                    //     'Content-Type': 'application/x-www-form-urlencoded'
+                    // }
+                }).then((res) => {
+                    var corTime = res.data.data.periods;
+                    var corNum = res.data.data.courses;
+                    if(corTime.length == 0 || corNum.length == 0 ){
+                        this.isContent = false;
+                        return;
+                    }else{
+                        this.isContent = true;
+                    }
+                    for(var i = 0; i < corTime.length; i++){
+
+                        switch (corTime[i].periodNum){
+                            case 1 :
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.diyi = '';
+                                    this.time.dier = '';
+                                }else{
+                                    this.time.diyi = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.dier = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 2:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.disan = '';
+                                    this.time.disi = '';
+                                }else{
+                                    this.time.disan = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.disi = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 3:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.diwu = '';
+                                    this.time.diliu = '';
+                                }else{
+                                    this.time.diwu = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.diliu = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 4:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.diqi = '';
+                                    this.time.diba = '';
+                                }else{
+                                    this.time.diqi = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.diba = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 5:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.dijiu = '';
+                                    this.time.dishi = '';
+                                }else{
+                                    this.time.dijiu = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.dishi = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 6:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.dishiyi = '';
+                                    this.time.dishier = '';
+                                }else{
+                                    this.time.dishiyi = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.dishier = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                            case 7:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.dishisan = '';
+                                    this.time.dishisi = '';
+                                }else{
+                                    this.time.dishisan = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.dishisi = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+
+                            case 8:
+                                if( corTime[i].startTime == '00:00:00' || corTime[i].endTime == '00:00:00'){
+                                    this.time.dishiwu = '';
+                                    this.time.dishiliu = '';
+                                }else{
+                                    this.time.dishiwu = corTime[i].startTime.substr(0,corTime[i].startTime.length-3);
+                                    this.time.dishiliu = corTime[i].endTime.substr(0,corTime[i].endTime.length-3);
+                                }
+                                break;
+                        }
+
+                    };
+                    for(var j = 0; j < corNum.length; j ++){
+                        if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 1){
+                            this.monday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 2){
+                            this.monday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 3){
+                            this.monday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 4){
+                            this.monday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 5){
+                            this.monday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 6){
+                            this.monday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 7){
+                            this.monday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 8){
+                            this.monday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 1 && corNum[j].periodNum == 9){
+                            this.monday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 1){
+                            this.tuesday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 2){
+                            this.tuesday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 3){
+                            this.tuesday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 4){
+                            this.tuesday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 5){
+                            this.tuesday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 6){
+                            this.tuesday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 7){
+                            this.tuesday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 8){
+                            this.tuesday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 2 && corNum[j].periodNum == 9){
+                            this.tuesday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 1){
+                            this.wednesday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 2){
+                            this.wednesday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 3){
+                            this.wednesday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 4){
+                            this.wednesday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 5){
+                            this.wednesday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 6){
+                            this.wednesday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 7){
+                            this.wednesday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 8){
+                            this.wednesday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 3 && corNum[j].periodNum == 9){
+                            this.wednesday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 1){
+                            this.thursday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 2){
+                            this.thursday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 3){
+                            this.thursday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 4){
+                            this.thursday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 5){
+                            this.thursday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 6){
+                            this.thursday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 7){
+                            this.thursday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 8){
+                            this.thursday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 4 && corNum[j].periodNum == 9){
+                            this.thursday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 1){
+                            this.friday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 2){
+                            this.friday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 3){
+                            this.friday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 4){
+                            this.friday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 5){
+                            this.friday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 6){
+                            this.friday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 7){
+                            this.friday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 8){
+                            this.friday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 5 && corNum[j].periodNum == 9){
+                            this.friday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 1){
+                            this.saturday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 2){
+                            this.saturday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 3){
+                            this.saturday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 4){
+                            this.saturday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 5){
+                            this.saturday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 6){
+                            this.saturday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 7){
+                            this.saturday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 8){
+                            this.saturday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 6 && corNum[j].periodNum == 9){
+                            this.saturday.jiu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 1){
+                            this.sunday.yi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 2){
+                            this.sunday.er = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 3){
+                            this.sunday.san = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 4){
+                            this.sunday.si = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 5){
+                            this.sunday.wu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 6){
+                            this.sunday.liu = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 7){
+                            this.sunday.qi = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 8){
+                            this.sunday.ba = corNum[j].courseName
+                        }else if(corNum[j].courseWeeks == 7 && corNum[j].periodNum == 9){
+                            this.sunday.jiu = corNum[j].courseName
+                        }
+                    }
+
+
+                }).catch(function (err) {
+                    console.log(err)
+                })
+
+            },
+
+            closeTabView: function () {
+                mui('.mui-popover').popover('hide');
+
+                var data = JSON.stringify({
+                    "userId": window.localStorage.getItem("userId"),
+                    "token": window.localStorage.getItem("token"),
+                    "courseStatus": window.app.courseStatusNum
+                });
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/user/changeUserMsg',
+                    data: data,
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    }
+                }).then((res) => {
+                    if (res.data.code == 0) {
+                        // window.localStorage.setItem('userName', this.userName);
+                        // window.location.href = '../../index.html'
+                        window.localStorage.setItem("courseStatus", this.courseStatusNum);
+                        if(window.localStorage.getItem('courseStatus') == 0){
+                            this.courseStatus = '关闭课程表';
+                            this.courseStatusNum = 1
+                        }else{
+                            this.courseStatus = '打开课程表';
+                            this.courseStatusNum = 0
+                        }
+                    } else {
+                        mui.toast(res.data.msg, {
+                            duration: 'long',
+                            type: 'div'
+                        })
+                    }
+                    window.app.statu = true;
+                }).catch((err) => {
+                    mui.toast('请检查网络是否打开', {
+                        duration: 'long',
+                        type: 'div'
+                    })
+                })
+
+            }
+
+        },
+
+    })
+</script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+#app {
+    min-width: 320px;
+}
+span{
+	color: #fff;
+	font-size: 16px;
+	line-height: 42px;
+}
+h2 {
+    padding: 30px;
+    color: #aaa;
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.main {
+   position: relative;
+
+}
+.main a {
+   width: 100%;
+   position: absolute;
+   /* left: 20%; */
+   font-size: 16px;
+}
+a:hover {
+    text-decoration: none;
+    color: #aaa;
+}
+
+a img {
+    width: 100px; 
+    vertical-align: middle;  
+}
+.pic {
+   margin-top: 150px;
+}

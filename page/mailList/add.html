@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="add.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>添加联系人</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span @click="goBack">取消</span>
+				<h1 class="mui-title">添加联系人</h1>
+				<span class="revise" @click="submit">完成</span>
+			</header>
+
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label><span class="must">*</span>姓名：</label>
+					<input v-model="contactName" type="text" class="mui-input-clear" placeholder="">
+				</div>
+				<div class="mui-input-row">
+					<label><span class="must">*</span>手机：</label>
+					<input v-model="contactPhone" type="tel" class="mui-input-clear" placeholder="">
+				</div>
+				<div class="mui-input-row">
+					<label>邮箱：</label>
+					<input v-model="contactEmail" type="email" class="mui-input-clear" placeholder="">
+				</div>
+			</form>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+	<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+	<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+	<script type="text/javascript" src="../../common.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				contactName: '',
+				contactPhone: '',
+				contactEmail: ''
+			},
+			methods: {
+				goBack: function() {
+					window.location.href = '../../index.html';
+				},
+				submit: function() {
+					var data = JSON.stringify({
+						"contactName": window.app.contactName + "",
+						"contactPhone": window.app.contactPhone + "",
+						"userId": window.localStorage.getItem("userId"),
+						"token": window.localStorage.getItem("token"),
+						"email": window.app.email + "",
+					});
+					if(this.contactName !== '' && this.contactPhone !== '') {
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/contact/contactAdd',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then(function(res) {
+							console.log(res);
+							window.location.href = '../../index.html'
+
+						}).catch(function(err) {
+							console.log(err)
+						})
+					}
+					else{
+						mui.alert('请输入必填项', function() {
+//								window.location.href = '../../index.html'
+							});
+					}
+				}
+			}
+		})
+	</script>
+
+</html>

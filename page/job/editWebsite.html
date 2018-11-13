@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="editWebsite.css" />
+		<title>编辑网站</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span @click="cancel">取消</span>
+				<h1 class="mui-title">编辑网站</h1>
+				<span class="revise" @click="editdone">完成</span>
+			</header>
+
+			<form class="mui-input-group">
+				<div class="mui-input-row" style="margin-top: 40px;">
+					<label>名称网站：</label>
+					<input type="text" v-model="list.name" class="mui-input-clear">
+				</div>
+				<div class="mui-input-row">
+					<label>网站链接：</label>
+					<input type="tel" v-model="list.url" class="mui-input-clear">
+				</div>
+				<button type="button" class="mui-btn mui-btn-primary" @click="delWebsite">删除网站</button>
+			</form>
+			
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+		</div>
+
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script>
+			var id;
+			var app = new Vue({
+				el: "#app",
+				data: {
+					statu: false,
+					list: {
+						name: '',
+						url: '',
+						id: ''
+					}
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+					getMsg: function() {
+						tabId = window.location.href.split('?')[1];
+						this.id = tabId;
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/website/websiteList',
+							data: {
+								userId: window.localStorage.getItem('userId'),
+								token: window.localStorage.getItem('token')
+							},
+							transformRequest: [function(data) {
+								let ret = ''
+								for(let it in data) {
+									ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+								}
+								return ret
+							}],
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							}
+						}).then(function(res) {
+							//						console.log(res);
+
+							if(res.data.code == 0) {
+								//							window.app.list = res.data.page.list;
+								for(var i = 0; i < res.data.page.list.length; i++) {
+									if(res.data.page.list[i].id == tabId) {
+										window.app.list.name = res.data.page.list[i].name;
+										window.app.list.url = res.data.page.list[i].url
+									}
+								}
+							} else {
+								mui.toast(res.data.msg, {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+
+							window.app.statu = true;
+
+						}).catch(function(err) {
+							console.log(err)
+						})
+
+					},
+
+					cancel: function() {
+						location.href = "website.html";
+					},
+					editdone: function() {
+						var data = JSON.stringify({
+							"userId": window.localStorage.getItem("userId"),
+							"token": window.localStorage.getItem("token"),
+							"name": this.list.name,
+							"url": this.list.url,
+							"id": this.id
+						})
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/website/update',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then(function(res) {
+							if(res.data.code == 0) {
+								//								location.href = './website.html';
+
+							} else {
+								mui.toast(res.data.msg, {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+
+						}).catch(function(err) {
+							console.log(err)
+						})
+					},
+					delWebsite: function() {
+						var btnArray = ['否', '是'];
+						mui.confirm('确认删除吗？', '亲', btnArray, function(e) {
+							if(e.index == 1) {
+								axios({
+									method: 'post',
+									url: JTURLAPI + '/app/website/delete',
+									data: {
+										id: window.location.href.split('?')[1],
+										userId: window.localStorage.getItem('userId'),
+										token: window.localStorage.getItem('token')
+									},
+									transformRequest: [function(data) {
+										let ret = ''
+										for(let it in data) {
+											ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+										}
+										return ret
+									}],
+									headers: {
+										'Content-Type': 'application/x-www-form-urlencoded'
+									}
+								}).then(function(res) {
+									if(res.data.code == 0) {
+										//										location.href = './website.html';
+
+									} else {
+										mui.toast(res.data.msg, {
+											duration: 'long',
+											type: 'div'
+										})
+									}
+
+								}).catch(function(err) {
+									console.log(err)
+								})
+								location.href = 'website.html';
+							} else {
+
+							}
+						})
+					}
+
+				}
+			})
+		</script>
+	</body>
+
+</html>

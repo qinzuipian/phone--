@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+    <link rel="stylesheet" href="../../common.css" />
+    <link rel="stylesheet" href="./course.css" />
+    <!--自适应屏幕-->
+    <meta name="format-detection" content="telphone=no, email=no" />
+    <!--取消ios自动识别手机号码与邮箱-->
+    <title>定位模式</title>
+</head>
+
+<body>
+<div id="app">
+    <header class="mui-bar mui-bar-nav">
+        <span @click="goBack">返回</span>
+        <h1 class="mui-title">定位模式</h1>
+        <span class="revise" @click="submit">完成</span>
+    </header>
+
+    <ul class="mui-table-view mui-table-view-radio ctt-content">
+        <li class="mui-table-view-cell" :class="{'mui-selected' : typeNum == 0}" @click="typeNum = 0">
+            <p>离线模式</p>
+            <a class="mui-navigate-right">设备离线,手动唤醒,家长端无法查看轨迹</a>
+        </li>
+        <li class="mui-table-view-cell" :class="{'mui-selected' : typeNum == 1}" @click="typeNum = 1">
+            <p>低耗模式</p>
+            <a class="mui-navigate-right">设备每五分钟上传一次轨迹</a>
+        </li>
+        <li class="mui-table-view-cell" :class="{'mui-selected' : typeNum == 2}" @click="typeNum = 2">
+            <p>普通模式</p>
+            <a class="mui-navigate-right">设备每三分钟上传一次轨迹</a>
+        </li>
+        <li class="mui-table-view-cell" :class="{'mui-selected' : typeNum == 3}" @click="typeNum = 3">
+            <p>性能模式</p>
+            <a class="mui-navigate-right">设备每二十秒上传一次轨迹</a>
+        </li>
+    </ul>
+
+</div>
+
+</body>
+<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+<script type="text/javascript" src="../../common.js"></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            typeNum: 0
+        },
+        mounted: function(){
+            this.setTypeNum();
+        },
+        methods: {
+            setTypeNum: function () {
+                var num = localStorage.getItem('locationType');
+                switch (num) {
+                    case '20':
+                        this.typeNum = 1;
+                        break;
+                    case '180':
+                        this.typeNum = 2;
+                        break;
+                    case '360':
+                        this.typeNum = 3;
+                        break;
+                    default:
+                        this.typeNum = 0;
+                }
+
+                console.log(this.typeNum)
+            },
+            goBack: function() {
+                window.location.href = '../../index.html';
+            },
+            submit: function () {
+                var locateFrequence;
+                switch (this.typeNum) {
+                    case 1:
+                        locateFrequence = 20;
+                        break;
+                    case 2:
+                        locateFrequence = 180;
+                        break;
+                    case 3:
+                        locateFrequence = 360;
+                        break;
+                    case 0:
+                        locateFrequence = 0;
+                }
+
+                axios({
+                    method: 'post',
+                    url: JTURLAPI + '/app/device/updateDeviceInfo',
+                    params: {
+                        userId: localStorage.getItem('userId'),
+                        token: localStorage.getItem('token'),
+                        locateFrequence: locateFrequence
+                    }
+                }).then((res) => {
+                    if (res.data.code == 0){
+                        localStorage.setItem('locationType', locateFrequence)
+                        window.location.href = '../../index.html'
+                    }
+                });
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="revise.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>修改信息</title>
+	</head>
+
+	<body>
+		<div id="app">
+
+			<header class="mui-bar mui-bar-nav">
+				<span><i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" @click="goBack"></i>返回</span>
+				<h1 class="mui-title">修改信息</h1>
+				<span class="revise" @click="submit">完成</span>
+			</header>
+
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>姓名：</label>
+					<input type="text" v-model="userName" class="mui-input-clear">
+				</div>
+				<div class="mui-input-row">
+					<label>性别：</label>
+					<select id="select" v-model="userSexTxt">
+						<option v-for="it in sex" v-html="it.val"></option>
+					</select>
+				</div>
+				<div class="mui-input-row">
+					<label>称谓：</label>
+					<input type="text" v-model="relationship" class="mui-input-clear">
+				</div>
+				<div class="mui-input-row">
+					<label>住址：</label>
+					<input type="tel" v-model="address" class="mui-input-clear">
+				</div>
+				<div class="mui-input-row">
+					<label>邮箱：</label>
+					<input type="tel" v-model="email" class="mui-input-clear">
+				</div>
+			</form>
+
+			<!-- 模态框部分 -->
+			<div class="spinner" v-if="!statu">
+				<div class="spinner-container container1">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container2">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+				<div class="spinner-container container3">
+					<div class="circle1"></div>
+					<div class="circle2"></div>
+					<div class="circle3"></div>
+					<div class="circle4"></div>
+				</div>
+			</div>
+			<div class="zzc" v-if="!statu"></div>
+		</div>
+
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script>
+			var app = new Vue({
+				el: "#app",
+				data: {
+					statu: true,
+					msg: {},
+					userName: '',
+					userSex: '',
+					relationship: '',
+					address: '',
+					email: '',
+					userSexTxt: '男',
+					sex: [{
+							val: '男',
+						},
+						{
+							val: '女',
+						}
+					],
+
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+
+					goBack: function() {
+						window.location.href = 'information.html';
+					},
+					submit: function() {
+						window.app.statu = false;
+
+//						if(window.app.userSexTxt == '男') {
+//							window.app.userSex = 0
+//						} else {
+//							window.app.userSex = 1
+//						}
+						var data = JSON.stringify({
+							"userId": parseInt(window.localStorage.getItem("userId")),
+							"token": window.localStorage.getItem("token"),
+							"userName": window.app.userName,
+							"userSex": window.app.userSexTxt,
+							"relationship": window.app.relationship,
+							"address": window.app.address,
+							"email": window.app.email
+						});
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/user/changeUserMsg',
+							data: data,
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then((res) => {
+							console.log(res);
+							if(res.data.code == 0) {
+								window.localStorage.setItem('userName', this.userName);
+								window.location.href = '../../index.html'
+							} else {
+								mui.toast(res.data.msg, {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+							window.app.statu = true;
+						}).catch((err) => {
+							mui.toast('请检查网络是否打开', {
+								duration: 'long',
+								type: 'div'
+							})
+						})
+						//						window.location.href = './information.html'
+					},
+					getMsg: function() {
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/user/userInfo',
+							data: {
+								token: window.localStorage.getItem("token"),
+								userId: window.localStorage.getItem("userId")
+							},
+							transformRequest: [function(data) {
+								// Do whatever you want to transform the data
+								let ret = ''
+								for(let it in data) {
+									ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+								}
+								return ret
+							}],
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							}
+						}).then(function(res) {
+							//debugger;
+							if(res.data.code == 0) {
+								window.app.userName = res.data.userInfo.userName;
+								window.app.relationship = res.data.userInfo.relationship;
+								window.app.address = res.data.userInfo.address;
+								window.app.email = res.data.userInfo.email;
+								if(res.data.userInfo.sex == null) {
+									window.app.userSexTxt == '您暂未设置'
+								} else if(res.data.userInfo.sex == 0) {
+									window.app.userSexTxt == '男'
+								} else {
+									window.app.userSexTxt == '女'
+								}
+
+								if(res.data.userInfo.email == null) {
+									window.app.email = '您暂未设置'
+								}
+								if(res.data.userInfo.userName == null) {
+									window.app.userName = '您暂未设置'
+								}
+								if(res.data.userInfo.relationship == null) {
+									window.app.relationship = '您暂未设置'
+								}
+								if(res.data.userInfo.address == null) {
+									window.app.address = '您暂未设置'
+								}
+
+							} else {
+								mui.toast('距离上次登录时间过长，请重新登录', {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+
+							//							window.app.statu = true;
+							//							console.log(window.app.statu)
+
+						}).catch(function(err) {
+							mui.toast('距离上次登录时间过长，请重新登录', {
+								duration: 'long',
+								type: 'div'
+							})
+						})
+
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>

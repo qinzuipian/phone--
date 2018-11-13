@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="suggestion.css" />
+		<!--自适应屏幕-->
+		<meta name="format-detection" content="telphone=no, email=no" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>意见反馈</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span @click="goBack">取消</span>
+				<h1 class="mui-title">意见反馈</h1>
+				<span class="revise" @click="submit">完成</span>
+			</header>
+			<textarea class="suggestion-text" name="" id="" cols="30" rows="10" placeholder="请输入您的意见或建议" v-model="suggestion"></textarea>
+			<div class="flex contact">
+				<p>请留下您的联系方式</p>
+				<input type="" name="" id="" value="" placeholder="QQ/手机号/微信/邮箱" v-model="contactTxt" />
+			</div>
+			<button type="button" class="mui-btn mui-btn-block mui-btn-primary" @click="submit" style="padding: 8px 0;width: 100%;font-size: 12px;">发送</button>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+	<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+	<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+	<script type="text/javascript" src="../../common.js"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				contactTxt: '',
+				suggestion: ''
+			},
+			methods: {
+				goBack: function() {
+					window.location.href = '../../index.html';
+				},
+				submit: function() {
+					if(this.suggestion == '') {
+						mui.toast('请输入建议或者意见', {
+							duration: 'long',
+							type: 'div'
+						})
+					} else if(this.contactTxt == '') {
+						mui.toast('请输入您的联系方式', {
+							duration: 'long',
+							type: 'div'
+						})
+					} else {
+						var data = JSON.stringify({
+							"userId": window.localStorage.getItem("userId"),
+							"token": window.localStorage.getItem("token"),
+							"contactInfomation": this.contactTxt,
+							"contact": this.suggestion
+						});
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/feedback/save ',
+							data: data,
+							//						params: {
+							//							userId: window.localStorage.getItem("userId"),
+							//							token: window.localStorage.getItem("token"),
+							//							contactInfomation: this.contactTxt,
+							//							contact: this.suggestion
+							//						}
+							headers: {
+								"Content-Type": "application/json;charset=UTF-8"
+							}
+						}).then(function(res) {
+							if(res.data.code == 0) {
+								mui.alert('提交成功', function() {
+									window.location.href = '../../index.html'
+								});
+							} else {
+								mui.toast(res.data.msg, {
+									duration: 'long',
+									type: 'div'
+								})
+							}
+						})
+					}
+				}
+			}
+		})
+	</script>
+
+</html>

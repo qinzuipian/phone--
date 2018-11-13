@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+
+        #allmap {
+            width: 100%;
+            overflow: hidden;
+            height: 100%;
+            /* margin-top: 40px; */
+        }
+
+        #result {
+            width: 100%;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+
+        dl,
+        dt,
+        dd,
+        ul,
+        li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        dt {
+            font-size: 14px;
+            font-family: "微软雅黑";
+            font-weight: bold;
+            border-bottom: 1px dotted #000;
+            padding: 5px 0 5px 5px;
+            margin: 5px 0;
+        }
+
+        dd {
+            padding: 5px 0 0 5px;
+        }
+
+        li {
+            line-height: 28px;
+        }
+
+        .mui-bar-nav.mui-bar .mui-icon {
+            color: #fff;
+            /* display: block; */
+        }
+
+        #result input {
+            width: 100px;
+            background: #4c6fb0;
+            color: #fff;
+        }
+
+        #result .inputdate {
+            width: 200px;
+            height: 34px;
+            font-size: 16px;
+            margin-bottom: 0;
+            background-color: transparent;
+            color: #aaa;
+
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=VzXPUBTBB9rsb4m0LIkhCqwdvx6A8c6e"></script>
+    <!--加载鼠标绘制工具-->
+    <!-- <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script> -->
+    <script src="draw.js"></script>
+    <script src="../../plugin/js/axios.js"></script>
+    <script src="../../common.js"></script>
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+    <!--加载检索信息窗口-->
+    <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+    <script src="../../plugin/js/mui.min.js"></script>
+    <!-- <script src="../resources/common/ums-common.js"></script> -->
+    <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+    <link rel="stylesheet" href="../../plugin/css/mui.min.css">
+    <link rel="stylesheet" href="../../common.css">
+    <title>触摸画圆</title>
+</head>
+
+<body>
+    <!-- 头部 -->
+
+    <header class="head mui-bar mui-bar-nav">
+        <!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+        <h1 class="mui-title">
+            地图管理
+        </h1>
+        <span class="other" onclick="confirm()">确定</span>
+        <!-- <a href="all.html" class="person"> -->
+        <span class="mui-icon mui-icon-back" onclick="backto()"></span>
+        <!-- </a> -->
+
+    </header>
+
+    <div id="result">
+        <input type="button" value="清除" onclick="clearAll()" />
+        <!-- <input type="text" class="inputdate" placeholder="请输入围栏ID"> -->
+    </div>
+    <!-- <div id="allmap" style="overflow:hidden;zoom:1;position:relative;"> -->
+    <div id="map" style="height:100%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;"></div>
+    <!-- </div> -->
+
+    <script type="text/javascript">
+
+
+        // 百度地图API功能
+        var map = new BMap.Map('map');
+        map.centerAndZoom('广州', 12);
+        map.enableScrollWheelZoom();
+        map.enablePinchToZoom();
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                map.panTo(r.point);
+            }
+        });
+        var overlays = [];
+        var ret = {};
+        var selectCount = 0;
+        /* 	var device = document.getElementsByClassName('deviceId').value;
+            console.log(device); */
+        var polygoncomplete = function (overlay) {
+            if (selectCount > 1) {
+                return;
+            }
+            var paths = overlay.getPath();
+            var strPath = '';
+            paths.map(function (eitem, eindex) {
+                strPath += eitem.lat + ',' + eitem.lng + ';'
+            });
+            sessionStorage.fencyType = 1;
+            sessionStorage.paths = strPath;
+            var str = strPath.substr(0, strPath.length - 1);
+            sessionStorage.paths = str;
+            selectCount += 1;
+        };
+        var circlecomplete = function (overlay) {
+            if (selectCount > 1) {
+                return;
+            }
+            var point = overlay.getCenter();
+            var radius = overlay.getRadius();
+            // sessionStorage.fencyType = 2;
+            sessionStorage.longitude = point.lng;
+            sessionStorage.latitude = point.lat;
+            sessionStorage.radius = radius;
+            selectCount += 1;
+        };
+        var styleOptions = {
+            strokeColor: "red",    //边线颜色。
+            fillColor: "red",      //填充颜色。当参数为空时，圆形将没有填充效果。
+            strokeWeight: 3,       //边线的宽度，以像素为单位。
+            strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+            fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+            strokeStyle: 'solid' //边线的样式，solid或dashed。
+        }
+        //实例化鼠标绘制工具
+        var drawingManager = new BMapLib.DrawingManager(map, {
+            isOpen: false, //是否开启绘制模式
+            enableDrawingTool: true, //是否显示工具栏
+            drawingMode: BMAP_DRAWING_CIRCLE,//绘制模式
+            drawingToolOptions: {
+                anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
+                drawingModes: [BMAP_DRAWING_CIRCLE, BMAP_DRAWING_POLYGON],//样式
+                offset: new BMap.Size(5, 5), //偏离值
+                drawingModes: [
+                    BMAP_DRAWING_CIRCLE
+                    // , BMAP_DRAWING_POLYGON
+                ]
+            },
+            circleOptions: styleOptions, //圆的样式
+            polygonOptions: styleOptions, //多边形的样式
+            rectangleOptions: styleOptions //矩形的样式
+        });
+        //添加鼠标绘制工具监听事件，用于获取绘制结果
+        drawingManager.addEventListener('polygoncomplete', polygoncomplete);
+        drawingManager.addEventListener('circlecomplete', circlecomplete);
+        // 清除围栏
+        function clearAll() {
+            selectCount = 0;
+            map.clearOverlays();
+            sessionStorage.removeItem('fencyType');
+            sessionStorage.removeItem('longitude');
+            sessionStorage.removeItem('latitude');
+            sessionStorage.removeItem('radius');
+            window.parent.location.reload();
+        };
+
+        function confirm() {
+            /* console.log(document.getElementsByClassName('inputdate'));
+            var device = document.getElementsByClassName('inputdate')[0].value;
+            console.log(device); */
+            axios({
+                method: 'post',
+                url: JTURLAPI + '/app/district/createCircle',
+                params: {
+                    longitude: sessionStorage.longitude,
+                    latitude: sessionStorage.latitude,
+                    radius: sessionStorage.radius,
+                    // vertexes: sessionStorage.paths,
+                    deviceId: localStorage.getItem('deviceId'),
+                    //  deviceId: '12345678'
+                    // fence_name: '西安',
+                },
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+
+            }).then(function (res) {
+                // console.log(res.data);
+                var info = res.data.data;
+                // console.log(info);
+                var info1 = JSON.parse(info);
+                if (info1.status == 2) {
+                    mui.toast('radius:必须是小数;最小值是0;最大值是5000', {
+                        duration: 'long',
+                        type: 'div'
+                    })
+                } else if (info1.size != 0) {
+                    mui.toast('该设备已存在围栏，无法上传', {
+                        duration: 'long',
+                        type: 'div'
+                    })
+
+                }
+            });
+            axios({
+                method: 'post',
+                url: JTURLAPI + '/app/district/createPolygon',
+                params: {
+                    vertexes: sessionStorage.paths,
+                    deviceId: localStorage.getItem('deviceId'),
+                    //  deviceId: '12345678'
+                    // fence_name: '西安',
+                },
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                }
+
+            }).then(function (res) {
+                // console.log(res.data);
+                var info = res.data.data;
+                // console.log(info);
+                var info1 = JSON.parse(info);
+                if (info1.status == 2) {
+                    mui.toast('radius:必须是小数;最小值是0;最大值是5000', {
+                        duration: 'long',
+                        type: 'div'
+                    })
+                } else if (info1.size != 0) {
+                    mui.toast('该设备已存在围栏，无法上传', {
+                        duration: 'long',
+                        type: 'div'
+                    })
+                }
+
+            });
+            window.location.href = './../../index.html';
+        }
+        function backto() {
+            window.location.href = './all.html';
+        }
+
+    </script>
+</body>
+
+</html>

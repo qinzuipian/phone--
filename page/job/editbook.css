@@ -1,0 +1,49 @@
+span{
+	color: #fff;
+	font-size: 12px;
+	line-height: 42px;
+}
+.revise{
+	float: right;
+	margin-right: 0.75rem;
+}
+.mui-input-group{
+	margin-top: 40px;
+	font-size: 16px;
+}
+#select{
+	font-size: 14px;
+	margin: auto;
+    padding: 0 0 0 18%;
+}
+.mui-input-group .mui-input-row:after{
+	background-color: #F5F5F5;
+}
+.mui-input-group:before,
+.mui-input-group:after{
+	background-color: #F5F5F5;
+}
+.mui-input-row label~input{
+	border-bottom: 0.05rem solid #c8c7cc;
+}
+.mui-input-group{
+	background-color: #F5F5F5;
+}
+.mui-input-group .mui-input-row{
+	height: 3.2rem;
+	margin-top: 1.5rem;
+}
+.mui-input-row label{
+	font-size: 18px;
+	width: 26%;
+	padding: 0.75rem 0rem 0.75rem 1.5rem;
+}
+.mui-input-row label~input{
+	text-align: center;
+	float: none;
+	width: 65%;
+}
+input::-webkit-input-placeholder {
+	/* placeholder字体大小  */
+	font-size: 14px;
+}

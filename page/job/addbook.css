@@ -1,0 +1,95 @@
+span {
+	color: #fff;
+	font-size: 12px;
+	line-height: 42px;
+}
+
+.mui-input-group {
+	margin-top: 50px;
+	font-size: 12px;
+}
+
+#select {
+	font-size: 14px;
+	margin: auto;
+	padding: 0 0 0 18%;
+}
+
+.mui-input-group .mui-input-row:after {
+	background-color: #F5F5F5;
+}
+
+.mui-input-group:before,
+.mui-input-group:after {
+	background-color: #F5F5F5;
+}
+
+.mui-input-row label~input {
+	border-bottom: 0.05rem solid #c8c7cc;
+}
+
+.mui-input-group {
+	background-color: #F5F5F5;
+}
+
+.mui-input-group .mui-input-row {
+	height: 3.2rem;
+	margin-top: 1.5rem;
+}
+
+.mui-input-row label {
+	font-size: 12px;
+	width: 25%;
+	padding: 0 15px;
+	line-height: 40px;
+}
+
+.mui-input-row label~input,
+.mui-input-row label~select {
+	text-align: center;
+	float: none;
+	width: 65%;
+}
+
+.mui-input-clear::-webkit-input-placeholder{
+	font-size: 12px;
+}
+.mui-btn-primary {
+	border: #4C6FB0;
+	background-color: #4C6FB0;
+}
+
+.mui-btn,
+button {
+	width: 100%;
+	padding: 0.8rem 0.6rem;
+	clear: both;
+	display: block;
+	margin-top: 1rem;
+	font-size: 12px;
+}
+
+.small {
+	width: 20%;
+	color: #fff;
+	font-size: 14px;
+	margin-left: 2.5rem;
+	border: #4C6FB0;
+	background-color: #4C6FB0;
+}
+
+input::-webkit-input-placeholder {
+	/* placeholder字体大小  */
+	font-size: 14px;
+}
+
+.mui-input-row label{
+	padding: 0 20px;
+}
+/*必选项*/
+.must{
+	color: red;
+	position: absolute;
+	left: 10px;
+	top: 2px;
+}

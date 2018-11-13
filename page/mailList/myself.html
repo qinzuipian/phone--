@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" href="../../plugin/css/mui.min.css" />
+		<link rel="stylesheet" href="../../common.css" />
+		<link rel="stylesheet" href="myself.css" />
+		<!--取消ios自动识别手机号码与邮箱-->
+		<title>个人信息</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="mui-bar mui-bar-nav">
+				<span @click="mailBack">
+				<i class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></i>通讯录</span>
+				<h1 class="mui-title">个人信息</h1>
+				<span class="revise" @click="edit">编辑</span>
+			</header>
+
+			<div class="img_wrap ctt-content">
+				<!--<img src="../../images/information.jpg"/>-->
+				<i class="mui-icon mui-icon-contact"></i>
+			</div>
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">姓名
+					<span v-html="list.contactName"></span>
+				</li>
+				<li class="mui-table-view-cell">手机
+					<span v-html="list.contactPhone"></span>
+				</li>
+				<!--<li class="mui-table-view-cell">邮箱
+				<span>support@mockingbot.com</span>
+			</li>-->
+			</ul>
+		</div>
+		<!--<button type="button" class="mui-btn mui-btn-primary">发消息</button>-->
+		<!--<button type="button" class="mui-btn mui-btn-primary">语音通话</button>-->
+		<script type="text/javascript" src="../../plugin/js/mui.min.js"></script>
+		<script type="text/javascript" src="../../plugin/js/vue.js"></script>
+		<script type="text/jscript" src="../../plugin/js/axios.js"></script>
+		<script type="text/javascript" src="../../common.js"></script>
+		<script>
+			var id;
+			var app = new Vue({
+				el: "#app",
+				data: {
+					list: {
+						contactName: '',
+						contactPhone: '',
+						id: ''
+					}
+				},
+				mounted: function() {
+					this.getMsg();
+				},
+				methods: {
+					getMsg: function() {
+						tabId = window.location.href.split('?')[1];
+						this.id = tabId;
+						axios({
+							method: 'post',
+							url: JTURLAPI + '/app/contact/contactList',
+							params: {
+								token: window.localStorage.getItem("token"),
+								userId: window.localStorage.getItem("userId"),
+								pageSize: 10000
+							},
+						}).then((res) => {
+							this.contactList = res.data.page.list;
+							for(let i = 0; i < this.contactList.length; i++) {
+								if(this.contactList[i].id == tabId) {
+									window.app.list.contactName = this.contactList[i].contactName;
+									window.app.list.contactPhone = this.contactList[i].contactPhone;
+								}
+
+							}
+						}).catch(err => {
+							mui.toast('请检查网络是否连接', {
+								duration: 'long',
+								type: 'div'
+							})
+						})
+
+					},
+					edit: function() {
+						window.location.href = "edit.html" + '?' + tabId;
+					},
+					mailBack: function() {
+						window.location.href = "../../index.html";
+					}
+				}
+			})
+		</script>
+
+	</body>
+
+</html>
